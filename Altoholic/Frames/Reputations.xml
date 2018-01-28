@@ -1,0 +1,207 @@
+﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Reputations.lua"></Script>
+
+	<Button name="RepItemTemplate" hidden="true" virtual="true">
+		<Size>
+			<AbsDimension x="37" y="20"/>
+		</Size>
+		<Layers> 
+			<Layer level="BACKGROUND"> 
+				<Texture name="$parent_Background" setAllPoints="true">
+					<Size>
+						<AbsDimension x="33" y="16"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT">
+							<Offset>
+								<AbsDimension x="2" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Color r="0.2" g="0.2" b="0.2" a="1" /> 
+				</Texture> 
+			</Layer>
+			<Layer level="OVERLAY"> 
+				<FontString name="$parentName" inherits="GameFontNormalSmall" justifyH="LEFT" >
+					<Size>
+						<AbsDimension x="26" y="18"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" /> 
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				this:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+			</OnLoad>
+			<OnEnter>
+				Altoholic_Reputations_OnEnter(this)
+			</OnEnter>
+			<OnLeave>
+				AltoTooltip:Hide();
+			</OnLeave>
+			<OnClick>
+				Altoholic_Reputations_OnClick(arg1, this:GetID())
+			</OnClick>
+		</Scripts>
+		<Backdrop name="$parentBackdrop" bgFile="Interface\TutorialFrame\TutorialFrameBackground" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<EdgeSize>
+				<AbsValue val="8"/>
+			</EdgeSize>
+			<TileSize>
+				<AbsValue val="36"/>
+			</TileSize>
+			<BackgroundInsets>
+				<AbsInset left="5" right="5" top="5" bottom="5"/>
+			</BackgroundInsets>
+			<Color r="1" g="1" b="1" a=".25"/>
+		</Backdrop>
+	</Button>
+		
+	<Button name="ReputationEntryTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="615" y="22"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString name="$parentName" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
+					<Size>
+						<AbsDimension x="160" y="18"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="10" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentCollapse" hidden="true">
+				<Size>
+					<AbsDimension x="16" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT">
+						<Offset>
+							<AbsDimension x="5" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						local id = this:GetParent():GetID()
+						if id ~= 0 then
+							local s = Altoholic.vars.Factions[id]
+							if s.isCollapsed ~= nil then
+								if s.isCollapsed == true then
+									s.isCollapsed = false
+								else
+									s.isCollapsed = true
+								end
+							end
+						end
+						Altoholic:Reputations_Update()
+					</OnClick>
+				</Scripts>
+				<NormalTexture name="$parentIcon" file="Interface\Buttons\UI-MinusButton-UP" />
+				<HighlightTexture file="Interface\Buttons\UI-PlusButton-Hilight" alphaMode="ADD" />
+			</Button>
+			<Button name="$parentItem1" inherits="RepItemTemplate" />
+			<Button name="$parentItem2" inherits="RepItemTemplate" />
+			<Button name="$parentItem3" inherits="RepItemTemplate" />
+			<Button name="$parentItem4" inherits="RepItemTemplate" />
+			<Button name="$parentItem5" inherits="RepItemTemplate" />
+			<Button name="$parentItem6" inherits="RepItemTemplate" />
+			<Button name="$parentItem7" inherits="RepItemTemplate" />
+			<Button name="$parentItem8" inherits="RepItemTemplate" />
+			<Button name="$parentItem9" inherits="RepItemTemplate" />
+			<Button name="$parentItem10" inherits="RepItemTemplate" />
+		</Frames>
+	</Button>
+	
+	<Frame name="Reputations" parent="AltoholicFrame" hidden="true">
+		<Size>
+			<AbsDimension x="615" y="306"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="-33" y="-105"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<ScrollFrame name="$parentScrollFrame" inherits="FauxScrollFrameTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+					<Anchor point="BOTTOMRIGHT" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size>
+								<AbsDimension x="31" y="256"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
+									<Offset>
+										<AbsDimension x="-2" y="5"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0" right="0.484375" top="0" bottom="1.0"/>
+						</Texture>
+						<Texture file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size>
+								<AbsDimension x="31" y="106"/>
+							</Size>
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT">
+									<Offset>
+										<AbsDimension x="-2" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0.515625" right="1.0" top="0" bottom="0.4140625"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnVerticalScroll>
+						FauxScrollFrame_OnVerticalScroll(41, function(this) 
+							Altoholic:Reputations_Update();
+						end)
+					</OnVerticalScroll>
+					<OnShow>
+						Altoholic:Reputations_Update();
+					</OnShow>
+				</Scripts>
+			</ScrollFrame>
+			<Button name="$parentClasses" inherits="EquipmentEntryTemplate" >
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentScrollFrame" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnShow>
+				ReputationsScrollFrame:Show()
+			</OnShow>
+		</Scripts>
+	</Frame>
+
+</Ui>

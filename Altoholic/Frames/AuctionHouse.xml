@@ -1,0 +1,205 @@
+﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="AuctionHouse.lua"></Script>
+
+	<Button name="AuctionEntryTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="615" y="41"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString name="$parentName" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="220" y="14"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="53" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentTimeLeft" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="220" y="10"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parentName" relativePoint="BOTTOMLEFT">
+							<Offset>
+								<AbsDimension x="0" y="-2"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentHighBidder" inherits="GameFontNormalSmall">
+					<Size>
+						<AbsDimension x="160" y="32"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parentName" relativePoint="TOPRIGHT">
+							<Offset>
+								<AbsDimension x="5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentPrice" inherits="GameFontNormalSmall" justifyH="RIGHT">
+					<Size>
+						<AbsDimension x="150" y="32"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" relativeTo="GameFontNormalSmall" relativePoint="BOTTOMRIGHT">
+							<Offset>
+								<AbsDimension x="5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentItem" inherits="ItemButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="10" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						local v = Altoholic.vars
+						local s = Altoholic.db.account.data[v.CurrentFaction][v.CurrentRealm].char[v.CurrentAlt][v.AuctionType][this:GetID()]
+						
+						if s.id ~= nil then
+							local _, link = GetItemInfo(s.id)
+							GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+							GameTooltip:SetHyperlink(link);
+							GameTooltip:Show();
+						end
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnClick>
+						local v = Altoholic.vars
+						local s = Altoholic.db.account.data[v.CurrentFaction][v.CurrentRealm].char[v.CurrentAlt][v.AuctionType][this:GetID()]
+
+						if s.id ~= nil then
+							local _, link = GetItemInfo(s.id)
+							if ( button == "LeftButton" ) and ( IsControlKeyDown() ) then
+								DressUpItemLink(link);
+							elseif ( button == "LeftButton" ) and ( IsShiftKeyDown() ) then
+								if ( ChatFrameEditBox:IsShown() ) then
+									ChatFrameEditBox:Insert(link);
+								else
+									AltoholicFrame_SearchEditBox:SetText(GetItemInfo(link))
+								end
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				this:RegisterForClicks("LeftButtonDown", "RightButtonDown");
+			</OnLoad>
+			<OnClick>
+				if button == "RightButton" then
+					ToggleDropDownMenu(1, nil, AltoAuctionsRightClickMenu, this:GetName(), 0, -5);
+				end
+			</OnClick>
+		</Scripts>
+		<HighlightTexture name="$parentHighlight" file="Interface\HelpFrame\HelpFrameButton-Highlight" alphaMode="ADD">
+			<Size>
+				<AbsDimension x="555" y="37"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="55" y="0"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<TexCoords left="0" right="1.0" top="0" bottom="0.578125"/>
+		</HighlightTexture>
+	</Button>
+
+	<Frame name="AltoAuctions" parent="AltoholicFrame" hidden="true">
+		<Size>
+			<AbsDimension x="615" y="306"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="-33" y="-105"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<Frame name="$parentRightClickMenu" inherits="UIDropDownMenuTemplate" id="1" hidden="true">
+				<Size>
+					<AbsDimension x="100" y="40"/>
+				</Size>
+				<Scripts>
+					<OnLoad>
+						UIDropDownMenu_Initialize(this, AltoAuctions_RightClickMenu_OnLoad, "MENU");
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<ScrollFrame name="$parentScrollFrame" inherits="FauxScrollFrameTemplate" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+					<Anchor point="BOTTOMRIGHT" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size>
+								<AbsDimension x="31" y="256"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
+									<Offset>
+										<AbsDimension x="-2" y="5"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0" right="0.484375" top="0" bottom="1.0"/>
+						</Texture>
+						<Texture file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size>
+								<AbsDimension x="31" y="106"/>
+							</Size>
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT">
+									<Offset>
+										<AbsDimension x="-2" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0.515625" right="1.0" top="0" bottom="0.4140625"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnVerticalScroll>
+						FauxScrollFrame_OnVerticalScroll(41, function(this) 
+							Altoholic:Auctions_Update();
+						end)
+					</OnVerticalScroll>
+					<OnShow>
+						Altoholic:Auctions_Update();
+					</OnShow>
+				</Scripts>
+			</ScrollFrame>
+		</Frames>
+		<Scripts>
+			<OnShow>
+				AltoAuctionsScrollFrame:Show()
+			</OnShow>
+		</Scripts>
+	</Frame>
+	
+</Ui>

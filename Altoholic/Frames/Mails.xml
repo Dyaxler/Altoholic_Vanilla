@@ -1,0 +1,140 @@
+﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Mails.lua"></Script>
+
+	<Button name="MailEntryTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="615" y="41"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString name="$parentName" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="320" y="32"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="53" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentCharacter" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="160" y="32"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" relativeTo="$parentName" relativePoint="BOTTOMRIGHT">
+							<Offset>
+								<AbsDimension x="5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentExpiry" inherits="GameFontNormalSmall" justifyH="RIGHT">
+					<Size>
+						<AbsDimension x="70" y="32"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" relativeTo="$parentCharacter" relativePoint="BOTTOMRIGHT">
+							<Offset>
+								<AbsDimension x="5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentItem" inherits="ItemButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="10" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+		</Frames>
+		<HighlightTexture name="$parentHighlight" file="Interface\HelpFrame\HelpFrameButton-Highlight" alphaMode="ADD">
+			<Size>
+				<AbsDimension x="560" y="37"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="55" y="0"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<TexCoords left="0" right="1.0" top="0" bottom="0.578125"/>
+		</HighlightTexture>
+	</Button>
+
+	<Frame name="Mail" parent="AltoholicFrame" hidden="true">
+		<Size>
+			<AbsDimension x="615" y="306"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="-33" y="-105"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<ScrollFrame name="$parentScrollFrame" inherits="FauxScrollFrameTemplate" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+					<Anchor point="BOTTOMRIGHT" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size>
+								<AbsDimension x="31" y="256"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
+									<Offset>
+										<AbsDimension x="-2" y="5"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0" right="0.484375" top="0" bottom="1.0"/>
+						</Texture>
+						<Texture file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size>
+								<AbsDimension x="31" y="106"/>
+							</Size>
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT">
+									<Offset>
+										<AbsDimension x="-2" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0.515625" right="1.0" top="0" bottom="0.4140625"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnVerticalScroll>
+						FauxScrollFrame_OnVerticalScroll(41, function(this) 
+							Altoholic:Mail_Update();
+						end)
+					</OnVerticalScroll>
+					<OnShow>
+						Altoholic:Mail_Update();
+					</OnShow>
+				</Scripts>
+			</ScrollFrame>
+		</Frames>
+		<Scripts>
+			<OnShow>
+				MailScrollFrame:Show()
+			</OnShow>
+		</Scripts>
+	</Frame>
+	
+</Ui>

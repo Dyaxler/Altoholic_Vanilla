@@ -1,0 +1,373 @@
+﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+
+	<Frame name="AltoOptions" parent="AltoholicFrame" hidden="true">
+		<Size>
+			<AbsDimension x="615" y="306"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="-33" y="-105"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="$parentTooltipInfo" inherits="GameFontNormalSmall" text="XML_TEXT_8">
+					<Size x="120" y="20" />
+					<Anchors>
+						<Anchor point="TOPRIGHT">
+							<Offset x="-120" y="-10" />
+						</Anchor>
+					</Anchors>
+					<Color r="255" g="255" b="255" />
+				</FontString>
+				<FontString name="$parentSearchInfo" inherits="GameFontNormalSmall" text="XML_TEXT_9">
+					<Size x="120" y="20" />
+					<Anchors>
+						<Anchor point="TOPRIGHT">
+							<Offset x="-120" y="-200" />
+						</Anchor>
+					</Anchors>
+					<Color r="255" g="255" b="255" />
+				</FontString>
+				<FontString name="$parentLootInfo" inherits="GameFontNormalSmall" justifyH="RIGHT">
+					<Size x="160" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parentSearchInfo" relativePoint="BOTTOMLEFT">
+							<Offset x="20" y="-40" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Slider name="$parent_SliderAngle" inherits="OptionsSliderTemplate"  minValue="1" maxValue="360" defaultValue="180" valueStep="1">
+				<Size>
+					<AbsDimension x="180" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="40" y="-40" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						local name = this:GetName()
+						local s = getglobal(name)
+						s.tooltipText = XML_TEXT_10; 
+						getglobal(name .. "Low"):SetText("1");
+						getglobal(name .. "High"):SetText("360"); 
+						getglobal(name .. "Text"):SetText(XML_TEXT_11 .. s:GetValue() ..")");
+					</OnLoad>
+					<OnValueChanged>
+						Altoholic:UpdateSlider(this:GetName(), "Minimap Icon Angle", "MinimapIconAngle")
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parent_SliderRadius" inherits="OptionsSliderTemplate"  minValue="1" maxValue="200" defaultValue="78" valueStep="1">
+				<Size>
+					<AbsDimension x="180" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="40" y="-90" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						local name = this:GetName()
+						local s = getglobal(name)
+						s.tooltipText = XML_TEXT_12; 
+						getglobal(name .. "Low"):SetText("1");
+						getglobal(name .. "High"):SetText("200"); 
+						getglobal(name .. "Text"):SetText(XML_TEXT_13 .. s:GetValue() ..")");
+					</OnLoad>
+					<OnValueChanged>
+						Altoholic:UpdateSlider(this:GetName(), "Minimap Icon Radius", "MinimapIconRadius")
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parent_SliderMailExpiry" inherits="OptionsSliderTemplate"  minValue="1" maxValue="15" defaultValue="5" valueStep="1">
+				<Size>
+					<AbsDimension x="180" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="40" y="-140" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						local name = this:GetName()
+						local s = getglobal(name)
+						s.tooltipText = XML_TEXT_14; 
+						getglobal(name .. "Low"):SetText("1");
+						getglobal(name .. "High"):SetText("15"); 
+						getglobal(name .. "Text"):SetText(XML_TEXT_15 .. s:GetValue() ..")");
+					</OnLoad>
+					<OnValueChanged>
+						local name = this:GetName()
+						local s = getglobal(name)
+						getglobal(name .. "Text"):SetText(XML_TEXT_15 .. s:GetValue() ..")");
+						if Altoholic.db.account ~= nil then
+							Altoholic.db.account.options.MailWarningThreshold = this:GetValue()
+						end
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<CheckButton name="$parent_ShowMinimap" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parent_SliderMailExpiry" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-20"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_16);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.ShowMinimap = 1
+								AltoholicMinimapButton:Show()
+							else
+								Altoholic.db.account.options.ShowMinimap = 0
+								AltoholicMinimapButton:Hide()
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_SortDescending" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parent_ShowMinimap" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_17);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.SortDescending = 1
+							else
+								Altoholic.db.account.options.SortDescending = 0
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_RestXPMode" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parent_SortDescending" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_18);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.RestXPMode = 1
+							else
+								Altoholic.db.account.options.RestXPMode = 0
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_ScanMailBody" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parent_RestXPMode" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_19);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.ScanMailBody = 1
+							else
+								Altoholic.db.account.options.ScanMailBody = 0
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_TooltipSource" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parentTooltipInfo" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_20);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.TooltipSource = 1
+							else
+								Altoholic.db.account.options.TooltipSource = 0
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_TooltipCount" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parent_TooltipSource" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_21);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.TooltipCount = 1
+							else
+								Altoholic.db.account.options.TooltipCount = 0
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_TooltipTotal" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parent_TooltipCount" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_22);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.TooltipTotal = 1
+							else
+								Altoholic.db.account.options.TooltipTotal = 0
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_TooltipRecipeInfo" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parent_TooltipTotal" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_24);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.TooltipRecipeInfo = 1
+							else
+								Altoholic.db.account.options.TooltipRecipeInfo = 0
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_SearchAutoQuery" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parentSearchInfo" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_25);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.SearchAutoQuery = 1
+							else
+								Altoholic.db.account.options.SearchAutoQuery = 0
+							end
+						end
+					</OnClick>
+					<OnEnter>
+						AltoTooltip:SetOwner(this, "ANCHOR_LEFT");
+						AltoTooltip:ClearLines();
+						AltoTooltip:AddLine(XML_TEXT_26)
+						AltoTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						AltoTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+	</Frame>
+
+</Ui>

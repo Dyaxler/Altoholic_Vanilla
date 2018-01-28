@@ -1,0 +1,71 @@
+﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<!-- Item template -->
+	<Button name="BagItemTemplate" inherits="ItemButtonTemplate" hidden="true" virtual="true">
+		<Anchors>
+			<Anchor point="BOTTOMRIGHT">
+				<Offset>
+					<AbsDimension x="0" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<Cooldown name="$parentCooldown" inherits="CooldownFrameTemplate"/>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				this:RegisterForClicks("LeftButtonDown", "RightButtonDown");
+			</OnLoad>
+			<OnEnter>
+				Altoholic:Item_OnEnter(this, this:GetParent():GetID(), this:GetID())
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide();
+			</OnLeave>
+			<OnClick>
+				Altoholic:Item_OnClick(this, button, this:GetParent():GetID(), this:GetID())
+			</OnClick>
+		</Scripts>
+	</Button>
+	<!-- Navigation -->
+	<Button name="MenuItemTemplate" hidden="true" virtual="true">
+		<Size>
+			<AbsDimension x="136" y="20"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentLines" file="Interface\AuctionFrame\UI-AuctionFrame-FilterLines">
+					<Size>
+						<AbsDimension x="7" y="20"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT">
+							<Offset>
+								<AbsDimension x="13" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<TexCoords left="0" right="0.4375" top="0" bottom="0.625"/>
+				</Texture>
+			</Layer>
+		</Layers>
+		<NormalTexture name="$parentNormalTexture" file="Interface\AuctionFrame\UI-AuctionFrame-FilterBg">
+			<TexCoords left="0" right="0.53125" top="0" bottom="0.625"/>
+		</NormalTexture>
+		<HighlightTexture file="Interface\PaperDollInfoFrame\UI-Character-Tab-Highlight" alphaMode="ADD"/>
+		<ButtonText name="$parentNormalText">
+			<Size>
+				<AbsDimension x="115" y="8"/>
+			</Size>
+			<Anchors>
+				<Anchor point="LEFT">
+					<Offset>
+						<AbsDimension x="4" y="0"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+		</ButtonText>
+		<NormalFont inherits="GameFontNormalSmall" justifyH="LEFT"/>
+		<HighlightFont inherits="GameFontHighlightSmall" justifyH="LEFT"/>
+	</Button>
+
+</Ui>
