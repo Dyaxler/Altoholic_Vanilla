@@ -1,6 +1,14 @@
-﻿local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
-
---local _G = getfenv(0)
+﻿Altoholic = AceLibrary("AceAddon-2.0"):new("AceConsole-2.0", "AceEvent-2.0", "AceDB-2.0", "AceHook-2.1")
+Altoholic:RegisterChatCommand({"/Altoholic", "/Alto"}, options)	
+Altoholic:RegisterDB("AltoholicDB")
+Altoholic.SearchResults = {}
+Altoholic.CharacterInfo = {}
+Altoholic.BagIndices = {}
+Altoholic.MenuCache = {}
+Altoholic.vars = {}
+local G = AceLibrary("Gratuity-2.0")
+local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
+local V = Altoholic.vars
 
 local options = { 
 	type='group',
@@ -35,7 +43,7 @@ local options = {
     }
 }
 
-Altoholic = AceLibrary("AceAddon-2.0"):new("AceConsole-2.0", "AceEvent-2.0", "AceDB-2.0")
+Altoholic = AceLibrary("AceAddon-2.0"):new("AceConsole-2.0", "AceEvent-2.0", "AceDB-2.0", "AceHook-2.1")
 Altoholic:RegisterChatCommand({"/Altoholic", "/Alto"}, options)	
 Altoholic:RegisterDB("AltoholicDB")
 Altoholic.SearchResults = {}

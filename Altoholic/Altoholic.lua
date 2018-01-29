@@ -5,7 +5,8 @@
 
 -- *** Open bugs ***
 
--- .Localization
+-- .Libs
+local G = AceLibrary("Gratuity-2.0")
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local BI = LibStub("LibBabble-Inventory-3.0"):GetLookupTable()
 local V = Altoholic.vars
@@ -1608,32 +1609,27 @@ function ChatEdit_InsertLink(text,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
 	end
 end
 
--- ** GameTooltip Hook **
+-- ** GameTooltip Hooks **
 function Altoholic:HookTooltip()
-    local Alt_GameTooltip_Show = GameTooltip.Show;
-    GameTooltip.Show = function(self)
-        GameTooltip:AddLine(Altoholic:WhoKnowsRecipe(self),1,1,1)
-        Alt_GameTooltip_Show(self)
-    end
+    self:SecureHook(GameTooltip, "SetBagItem", function(this, bag, slot)
+        Altoholic:WhoKnowsRecipe(GameTooltip)
+    end)
+    self:SecureHook(GameTooltip, "SetInventoryItem", function(this, bag, slot)
+        Altoholic:WhoKnowsRecipe(GameTooltip)
+    end)
+    self:SecureHook(GameTooltip, "SetInboxItem", function(index)
+        Altoholic:WhoKnowsRecipe(index)
+    end)
 end
 
-function Altoholic:WhoKnowsRecipe()
-    local objective = GameTooltipTextLeft1:GetText()
-    local cacheKey = ""
-    local validKey = false
-    if (objective) then
-        cacheKey = cacheKey .. objective
-        validKey = true
-    end
-    if not validKey then
-        return
-    end
-    local ttname = getglobal('GameTooltipTextLeft1'):GetText()
-    local _, _, craftName = string.find(ttname, ".*:%s(.+)")
-    if craftName == nil then return end
-    local ttprofession = getglobal('GameTooltipTextLeft2'):GetText()
-    local _, _, profName, profLevel = string.find(ttprofession, "Requires (.+) %((%d+)%)")
-    if profname or profLevel == nil then return end
+function Altoholic:WhoKnowsRecipe(tooltip)
+    local ttname, craftName, ttprofession, profName, profLevel
+    if tooltip == nil then return end
+    ttname = getglobal('GameTooltipTextLeft1'):GetText()
+    if ttname == nil then return end
+    _, _, craftName = string.find(ttname, ".*:%s(.+)")
+    ttprofession = getglobal('GameTooltipTextLeft2'):GetText()
+    _, _, profName, profLevel = string.find(ttprofession, ".*%s(.+)%s%((.+)%)")
     craftName = tostring(craftName)
     profName = tostring(profName)
     profLevel = tonumber(profLevel)
@@ -1672,13 +1668,17 @@ function Altoholic:WhoKnowsRecipe()
                     end                
                     if s == nil then
                         s = msg
+                        GameTooltip:AddLine(" ",1,1,1)
+                        GameTooltip:AddLine(s,1,1,1)
                     else
                         s = s .. msg
+                        GameTooltip:AddLine(" ",1,1,1)
+                        GameTooltip:AddLine(s,1,1,1)
                     end
                 end
             end
+            GameTooltip:Show()
         end
-        return s
     end
 end
 

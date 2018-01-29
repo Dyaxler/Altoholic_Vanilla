@@ -107,6 +107,7 @@ function Altoholic:Item_OnEnter(this, bagID, itemID)
                 GameTooltip:AddLine(L["Bank bag"],0,1,0);
             end
         end
+        Altoholic:WhoKnowsRecipe(this)
         GameTooltip:Show();
         return
     else	-- bag content
@@ -126,6 +127,7 @@ function Altoholic:Item_OnEnter(this, bagID, itemID)
 		else
 			GameTooltip:SetHyperlink(link);
 		end
+        Altoholic:WhoKnowsRecipe(this)
 		GameTooltip:Show();
 	end
 end
