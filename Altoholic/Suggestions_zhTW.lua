@@ -2,14 +2,11 @@
 local BI = LibStub("LibBabble-Inventory-3.0"):GetLookupTable()
 local BZ = LibStub("LibBabble-Zone-3.0"):GetLookupTable()
 local BF = LibStub("LibBabble-Faction-3.0"):GetLookupTable()
-
-if GetLocale() ~= "zhTW" then return end
-
 local WHITE		= "|cFFFFFFFF"
 local GREEN		= "|cFF00FF00"
 local YELLOW	= "|cFFFFFF00"
 
---local _G = getfenv(0)
+if GetLocale() ~= "zhTW" then return end
 
 -- 以下為聲望值、等級、技能等的建議
 Altoholic.Suggestions = {

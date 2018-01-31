@@ -1,13 +1,12 @@
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
-
 local WHITE		= "|cFFFFFFFF"
 local RED		= "|cFFFF0000"
 local GREEN		= "|cFF00FF00"
 local TEAL		= "|cFF00FF9A"
 
 function Altoholic:Quests_Update()
-	local c = self.db.account.data[V.CurrentFaction][V.CurrentRealm].char[V.CurrentAlt]		-- current alt
+	local c = self.db.account.data[V.CurrentFaction][V.CurrentRealm].char[V.CurrentAlt]
 	local VisibleLines = 14
 	local frame = "Quests"
 	local entry = frame.."Entry"
@@ -26,20 +25,20 @@ function Altoholic:Quests_Update()
 	local DrawGroup
 	local i=1
 	for line, s in pairs(c.questlog) do
-		if (offset > 0) or (DisplayedCount >= VisibleLines) then		-- if the line will not be visible
-			if s.isHeader then													-- then keep track of counters
+		if (offset > 0) or (DisplayedCount >= VisibleLines) then
+			if s.isHeader then
 				if s.isCollapsed == false then
 					DrawGroup = true
 				else
 					DrawGroup = false
 				end
 				VisibleCount = VisibleCount + 1
-				offset = offset - 1		-- no further control, nevermind if it goes negative
+				offset = offset - 1
 			elseif DrawGroup then
 				VisibleCount = VisibleCount + 1
-				offset = offset - 1		-- no further control, nevermind if it goes negative
+				offset = offset - 1
 			end
-		else		-- line will be displayed
+		else
 			if s.isHeader then
 				if s.isCollapsed == false then
 					getglobal(entry..i.."Collapse"):SetNormalTexture("Interface\\Buttons\\UI-MinusButton-Up"); 
@@ -140,16 +139,16 @@ function Altoholic:QuestLink_OnEnter(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
     GameTooltip:AddLine("|cffffffff"..o.questObjectives.."|r",1,1,1,true);
     local questTitle = title
-	local bOtherCharsOnQuest		-- is there at least one other char on the quest ?
-	for CharacterName, c in pairs(r.char) do		-- browse all chars on this realm ..
-		if CharacterName ~= V.CurrentAlt then		-- .. skip current char of course
-			for index, q in pairs(c.questlog) do	-- parse all quests
+	local bOtherCharsOnQuest
+	for CharacterName, c in pairs(r.char) do
+		if CharacterName ~= V.CurrentAlt then
+			for index, q in pairs(c.questlog) do
 	            local altQuestTitle = q.title
 				if altQuestTitle == questTitle then
 					if not bOtherCharsOnQuest then
 						GameTooltip:AddLine(" ",1,1,1);
 						GameTooltip:AddLine(GREEN .. L["Are also on this quest:"],1,1,1);
-						bOtherCharsOnQuest = true	-- pass here only once
+						bOtherCharsOnQuest = true
 					end
 					GameTooltip:AddLine(Altoholic:GetClassColor(c.class) .. CharacterName,1,1,1);
 				end
@@ -161,7 +160,10 @@ end
 
 function Altoholic:UpdateQuestLog()
 	local q = self.db.account.data[V.faction][V.realm].char[UnitName("player")].questlog
-	self:ClearTable(q)
+    if q[0] then
+        q[0] = {}
+        q[0] = nil
+    end
 	for i = GetNumQuestLogEntries(), 1, -1 do
 		local _, _, _, isHeader, isCollapsed = GetQuestLogTitle(i);
 		if isHeader and isCollapsed then
@@ -180,7 +182,6 @@ function Altoholic:UpdateQuestLog()
             q[i].level = level
             q[i].questDescription = questDescription
             q[i].questObjectives = questObjectives
-
 			SelectQuestLogEntry(i);
 			q[i].money= GetQuestLogRewardMoney();
 		else

@@ -2,16 +2,13 @@ local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local BI = LibStub("LibBabble-Inventory-3.0"):GetLookupTable()
 local BZ = LibStub("LibBabble-Zone-3.0"):GetLookupTable()
 local BF = LibStub("LibBabble-Faction-3.0"):GetLookupTable()
-
--- temporary test, until all locales are done for the suggestions, test the ones that are done in order to use them instead of enUS, this test will be replaced later on.
-if (GetLocale() == "zhCN") or
-	(GetLocale() == "zhTW") then return end				-- exit to use zhCN or zhTW instead of enUS
-
 local WHITE		= "|cFFFFFFFF"
 local GREEN		= "|cFF00FF00"
 local YELLOW	= "|cFFFFFF00"
 
---local _G = getfenv(0)
+-- temporary test, until all locales are done for the suggestions, test the ones that are done in order to use them instead of enUS, this test will be replaced later on.
+if (GetLocale() == "zhCN") or
+	(GetLocale() == "zhTW") then return end				-- exit to use zhCN or zhTW instead of enUS
 
 -- This table contains a list of suggestions to get to the next level of reputation, craft or skill
 Altoholic.Suggestions = {

@@ -1,17 +1,13 @@
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local BI = LibStub("LibBabble-Inventory-3.0"):GetLookupTable()
 local V = Altoholic.vars
-
 local INFO_REALM_LINE = 1
 local INFO_CHARACTER_LINE = 2
 local INFO_TOTAL_LINE = 3
-
 local GREEN		= "|cFF00FF00"
 local YELLOW	= "|cFFFFFF00"
 local GOLD		= "|cFFFFD700"
 local CYAN		= "|cFF1CFAFE"
-
---local _G = getfenv(0)
 
 function Altoholic:BagUsage_Update()
 	local VisibleLines = 14

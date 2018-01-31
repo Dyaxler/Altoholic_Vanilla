@@ -1,8 +1,6 @@
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
-
 local LEVEL_CAP = 60
-
 local WHITE		= "|cFFFFFFFF"
 local GREEN		= "|cFF00FF00"
 local RED		= "|cFFFF0000"

@@ -1,10 +1,7 @@
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
-
 local WHITE		= "|cFFFFFFFF"
 local GREEN		= "|cFF00FF00"
-
--- Class constants, for readability, these values match the ones in Altoholic.Classes (altoholic.lua)
 local CLASS_MAGE = 1
 local CLASS_WARRIOR	= 2
 local CLASS_HUNTER	= 3
@@ -196,27 +193,25 @@ function Equipment_RightClickMenu_OnLoad()
 end
 
 function Altoholic_FindEquipmentUpgrade(self)
-	-- debugprofilestart()
 	local _, itemLink, _, itemMinLevel, itemType, itemSubType, _, itemEquipLoc = GetItemInfo(V.UpgradeItemID)
     if itemMinLevel == 0 or itemMinLevel == nil then
         itemMinLevel = 57
     end
     local itemLevel = itemMinLevel + 5
-	V.Search_iLvl = itemLevel				-- set search parameters
+	V.Search_iLvl = itemLevel
 	V.SearchType = itemType
 	V.SearchSubType = itemSubType
 	V.SearchEquipLoc = Altoholic.InvSlots[itemEquipLoc]
-	--Altoholic:ClearTable(Altoholic.SearchResults)
     Altoholic.SearchResults = {}
 	V.SearchLoots = true
 	local VerifyFunc
 	if this.value ~= -1 then
 		V.CharacterClass = this.value
 		VerifyFunc = Altoholic.VerifyUpgradeByStats
-		AltoTooltip:SetOwner(this, "ANCHOR_LEFT");	-- set the owner only once before the sethyperlink's in the verification method
+		AltoTooltip:SetOwner(this, "ANCHOR_LEFT");
 		-- Get current item stats
-		V.SearchItemStats = {}	-- contains the stats of the item for which we'll try to find upgrades
-		V.TooltipLines = {}	-- cache containing the text lines of the tooltip "+15 stamina, etc.."
+		V.SearchItemStats = {}
+		V.TooltipLines = {}
 		local statLine = Altoholic.FormatStats[V.CharacterClass]
 		AltoTooltip:SetHyperlink(itemLink)
 		for _, BaseStat in pairs(Altoholic.BaseStats[V.CharacterClass]) do
@@ -260,9 +255,8 @@ function Altoholic_FindEquipmentUpgrade(self)
 			end
 		end
 	end
-	AltoTooltip:Hide();	-- mandatory hide after processing	
-	
-	V.Search_iLvl = nil				-- release memory
+	AltoTooltip:Hide();
+	V.Search_iLvl = nil
 	V.SearchType = nil
 	V.SearchSubType = nil
 	V.SearchEquipLoc = nil
@@ -270,13 +264,11 @@ function Altoholic_FindEquipmentUpgrade(self)
 	V.SearchInstance = nil
 	V.SearchBoss = nil
 	V.SearchLootItemID = nil
-	--Altoholic:ClearTable(V.SearchItemStats)	
     V.SearchItemStats = {}
     V.SearchItemStats = nil
-	--Altoholic:ClearTable(V.TooltipLines)
     V.TooltipLines = {}
 	V.TooltipLines = nil
-	if AltoOptions_SortDescending:GetChecked() then 		-- descending sort ?
+	if AltoOptions_SortDescending:GetChecked() then
 		table.sort(Altoholic.SearchResults, function(a,b)
 			return a.iLvl > b.iLvl
 		end)
@@ -286,5 +278,4 @@ function Altoholic_FindEquipmentUpgrade(self)
 		end)
 	end
 	Altoholic:ActivateMenuItem("Search")
-	-- DEFAULT_CHAT_FRAME:AddMessage(debugprofilestop())
 end

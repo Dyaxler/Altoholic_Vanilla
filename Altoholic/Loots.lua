@@ -4,8 +4,6 @@ local BZ = LibStub("LibBabble-Zone-3.0"):GetLookupTable()
 local BF = LibStub("LibBabble-Faction-3.0"):GetLookupTable()
 local BI = LibStub("LibBabble-Inventory-3.0"):GetLookupTable()
 
---local _G = getfenv(0)
-
 -- Simplified loot table containing item ID's only, based on AtlasLoot v4.05.00 
 Altoholic.LootTable = {
 			

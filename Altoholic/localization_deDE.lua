@@ -1,7 +1,5 @@
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 
---local _G = getfenv(0)
-
 L:RegisterTranslations("deDE", function() return {
 
 	-- Note: since 2.4.004 and the support of LibBabble, certain lines are commented, but remain there for clarity (especially those concerning the menu)

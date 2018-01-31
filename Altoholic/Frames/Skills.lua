@@ -1,11 +1,9 @@
 local BI = LibStub("LibBabble-Inventory-3.0"):GetLookupTable()
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
-
 local INFO_REALM_LINE = 1
 local INFO_CHARACTER_LINE = 2
 local INFO_TOTAL_LINE = 3
-
 local WHITE		= "|cFFFFFFFF"
 local TEAL		= "|cFF00FF9A"
 local RED		= "|cFFFF0000"
@@ -201,7 +199,6 @@ function Altoholic_Skill_OnEnter(self)
 end
 
 function Altoholic:GetSkillInfo(skillString)
-	-- from "200/225", returns the numeric values
 	if type(skillString) ~= "string" then
 		return 0, 0
 	end
@@ -210,18 +207,25 @@ function Altoholic:GetSkillInfo(skillString)
 end
 
 function Altoholic:UpdateTradeSkill(tradeskillName)
-	local c = self.db.account.data[V.faction][V.realm].char[V.player]		-- this char
+	local c = self.db.account.data[V.faction][V.realm].char[V.player]
 	local r = c.recipes[tradeskillName].list
-	self:ClearTable(r)
-	for i = GetNumTradeSkills(), 1, -1 do		-- 1st pass, expand all categories
+    if c.recipes[0] then
+        c.recipes[0] = {}
+        c.recipes[0] = nil
+    end
+    if c.recipes[tradeskillName].list[0] then
+        c.recipes[tradeskillName].list[0] = {}
+        c.recipes[tradeskillName].list[0] = nil
+    end
+	for i = GetNumTradeSkills(), 1, -1 do
 		local _, skillType, _, isExpanded  = GetTradeSkillInfo(i)
 		if (skillType == "header") and (isExpanded ~= true)  then
 			ExpandTradeSkillSubClass(i)
 		end
 	end
 	for k, v in pairs(c.ProfessionCooldowns) do
-		local skill = Altoholic:strsplit("-", k)		-- keys are like : ["Tailoring-21845"] = "315459.769|1211033170"
-		if skill == tradeskillName	then		-- if we're on the right tradeskill .. clear this entry, as it will be refreshed a bit further in this method
+		local skill = Altoholic:strsplit("-", k)
+		if skill == tradeskillName	then
 			v = nil
 		end
 	end
@@ -233,8 +237,8 @@ function Altoholic:UpdateTradeSkill(tradeskillName)
 			r[i].isHeader = true
 		else
 			r[i].link = GetTradeSkillItemLink(i)
-			local itemLink = GetTradeSkillItemLink(i)		-- in certain cases, scanning the item link will fail
-			if not itemLink then				-- this usually happens  after a patch, when the local skills  cache has been reset
+			local itemLink = GetTradeSkillItemLink(i)
+			if not itemLink then
 				bScanFailed = true
 				break
 			end
@@ -250,7 +254,7 @@ function Altoholic:UpdateTradeSkill(tradeskillName)
 				local link = GetTradeSkillReagentItemLink(i, j)
 				if link then
 					s = s .. self:GetIDFromLink( link ) .. ":" .. reagentCount .. "|"
-				else	-- when the trading skill window is opened, this should never happen, if it does, let the user known
+				else
 					bScanFailed = true
 				end
 			end
@@ -267,18 +271,25 @@ end
 
 function Altoholic:UpdateCraft(tradeskillName)
 	if tradeskillName == L["Beast Training"] then return end
-	local c = self.db.account.data[V.faction][V.realm].char[V.player]		-- this char
+	local c = self.db.account.data[V.faction][V.realm].char[V.player]
 	local r = c.recipes[tradeskillName].list
-	self:ClearTable(r)
-	for i = GetNumCrafts(), 1, -1 do		-- 1st pass, expand all categories
+    if c.recipes[0] then
+        c.recipes[0] = {}
+        c.recipes[0] = nil
+    end
+    if c.recipes[tradeskillName].list[0] then
+        c.recipes[tradeskillName].list[0] = {}
+        c.recipes[tradeskillName].list[0] = nil
+    end
+	for i = GetNumCrafts(), 1, -1 do
 		local _, _, craftType, _, isExpanded = GetCraftInfo(i)
 		if (craftType == "header") and (isExpanded ~= true)  then
 			ExpandCraftSkillLine(i)
 		end
 	end
 	for k, v in pairs(c.ProfessionCooldowns) do
-		local skill = Altoholic:strsplit("-", k)		-- keys are like : ["Tailoring-21845"] = "315459.769|1211033170"
-		if skill == tradeskillName	then		-- if we're on the right tradeskill .. clear this entry, as it will be refreshed a bit further in this method
+		local skill = Altoholic:strsplit("-", k)
+		if skill == tradeskillName	then
 			v = nil
 		end
 	end
@@ -303,7 +314,7 @@ function Altoholic:UpdateCraft(tradeskillName)
 				local link = GetCraftReagentItemLink(i, j)
 				if link then
 					s = s .. self:GetIDFromLink( link ) .. ":" .. reagentCount .. "|"
-				else	-- when the trading skill window is opened, this should never happen, if it does, let the user known
+				else
 					bScanFailed = true
 				end
 			end
@@ -337,8 +348,6 @@ function Altoholic:TRADE_SKILL_SHOW()
 end
 
 function Altoholic:TRADE_SKILL_UPDATE()
-	-- The hook in DoTradeSkill will register this event so that we only update skills once.
-	-- unregister it before calling the update, or the event will be called recursively (due to expand/collapse)
 	self:UnregisterEvent("TRADE_SKILL_UPDATE")
 	self:UpdateTradeSkill(GetTradeSkillLine())
 end

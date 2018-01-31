@@ -6,9 +6,13 @@ Altoholic.CharacterInfo = {}
 Altoholic.BagIndices = {}
 Altoholic.MenuCache = {}
 Altoholic.vars = {}
+Altoholic.vars.version = "v1.0"
 local G = AceLibrary("Gratuity-2.0")
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
+local BF = LibStub("LibBabble-Faction-3.0"):GetLookupTable()
+local BZ = LibStub("LibBabble-Zone-3.0"):GetLookupTable()
+
 
 local options = { 
 	type='group',
@@ -43,16 +47,6 @@ local options = {
     }
 }
 
-Altoholic = AceLibrary("AceAddon-2.0"):new("AceConsole-2.0", "AceEvent-2.0", "AceDB-2.0", "AceHook-2.1")
-Altoholic:RegisterChatCommand({"/Altoholic", "/Alto"}, options)	
-Altoholic:RegisterDB("AltoholicDB")
-Altoholic.SearchResults = {}
-Altoholic.CharacterInfo = {}
-Altoholic.BagIndices = {}
-Altoholic.MenuCache = {}
-Altoholic.vars = {}
-local V = Altoholic.vars
-
 Altoholic.Categories = {
 	"AccountSummary", 
 	"BagUsage",
@@ -74,6 +68,7 @@ Altoholic.RecipesBooks = {
     "Plans:",
     "Formula:",
     "Schematic:",
+    "Recipe:",
     --Class Books:
     "Book of",
     "Book:",
@@ -270,10 +265,6 @@ Altoholic:RegisterDefaults('account', {
 		}
 	}
 })
-
-local BF = LibStub("LibBabble-Faction-3.0"):GetLookupTable()
-local BZ = LibStub("LibBabble-Zone-3.0"):GetLookupTable()
-local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 
 -- Factions reference table, based on http://www.wowwiki.com/Factions
 -- a table with a similar structure (but only with required lines) will be build to make the reputations frame

@@ -1,16 +1,11 @@
 local BZ = LibStub("LibBabble-Zone-3.0"):GetLookupTable()
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
-
 local WHITE		= "|cFFFFFFFF"
 local GREEN		= "|cFF00FF00"
 local ORANGE	= "|cFFFF7F00"
 local RED		= "|cFFFF0000"
 local TEAL		= "|cFF00FF9A"
-
---local _G = getfenv(0)
-
-UIDropDownMenu_CreateInfo = UIDropDownMenu_CreateInfo or loadstring("local t = {} return function() for k in pairs(t) do t[k] = nil end return t end")()
 
 function Altoholic:Auctions_Update_Auctions()
 	local c = self.db.account.data[V.CurrentFaction][V.CurrentRealm].char[V.CurrentAlt]		-- current alt
@@ -25,7 +20,6 @@ function Altoholic:Auctions_Update_Auctions()
 		self:ClearScrollFrame(getglobal(frame.."ScrollFrame"), entry, VisibleLines, 41)
 		return
 	else
-		--getglobal("AltoholicFrame_Status"):SetText("|cFFFFD700" .. V.CurrentAlt .. " of ".. V.CurrentRealm .. " |cFFFFFFFF" .. AUCTIONS ": " .. L["last check "] .. self:GetDelayInDays(c.lastAHcheck).. L[" days ago"])
    		getglobal("AltoholicFrame_Status"):SetText("|cFFFFD700" .. V.CurrentAlt .. " of ".. V.CurrentRealm .. " |cFFFFFFFF: " .. L["last check "] .. self:GetDelayInDays(c.lastAHcheck).. L[" days ago"])
 		getglobal("AltoholicFrame_Status"):Show()
 	end
@@ -217,8 +211,6 @@ function Altoholic:UpdatePlayerAuctions()
 	
 end
 
--- AHType = "auctions" or "bids" (the name of the table in the DB)
--- AHZone = nil for player faction, or 1 for goblin
 function Altoholic:ClearAHEntries(AHType, AHZone, character)
 	local c = self.db.account.data[V.faction][V.realm].char[character]
 	
@@ -275,7 +267,6 @@ function Altoholic_ClearPlayerAHEntries()
 end
 
 -- *** EVENT HANDLERS ***
-
 function Altoholic:AUCTION_HOUSE_SHOW()
 	V.isAHOpen = true
 	self:RegisterEvent("AUCTION_BIDDER_LIST_UPDATE")

@@ -1,7 +1,5 @@
 ﻿local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 
---local _G = getfenv(0)
-
 --zhTW locale file by 天明@眾星之子
 L:RegisterTranslations("zhTW", function() return {
 

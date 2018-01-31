@@ -1,7 +1,6 @@
 local BI = LibStub("LibBabble-Inventory-3.0"):GetLookupTable()
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
-
 local INFO_REALM_LINE = 1
 local INFO_CHARACTER_LINE = 2
 local INFO_TOTAL_LINE = 3

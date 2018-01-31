@@ -10,7 +10,6 @@ local G = AceLibrary("Gratuity-2.0")
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local BI = LibStub("LibBabble-Inventory-3.0"):GetLookupTable()
 local V = Altoholic.vars
-V.version = "v1.0"
 local WHITE		= "|cFFFFFFFF"
 local RED		= "|cFFFF0000"
 local GREEN		= "|cFF00FF00"
@@ -27,6 +26,10 @@ local MENU_QUESTS = 6
 local MENU_RECIPES = 7
 local MENU_AUCTIONS = 8
 local MENU_BIDS = 9
+local INFO_REALM_LINE = 1
+local INFO_CHARACTER_LINE = 2
+local INFO_TOTAL_LINE = 3
+local LEVEL_CAP = 60
 
 Altoholic.Menu = {
 	{	name = L["Account Summary"], isCollapsed = false,
@@ -87,34 +90,12 @@ Altoholic.Menu = {
 				OnClick = function() Altoholic:Menu_Update(MENU_SEARCH, 2 )	end
             },
 			{ name = BI["Consumable"],	isCollapsed = true,
-				subMenu = {
-					{ name = L["Any"], OnClick = function() Altoholic:SearchItem(BI["Consumable"]) end },
-					{ name = BI["Food & Drink"], OnClick = function() Altoholic:SearchItem(BI["Consumable"], BI["Food & Drink"]) end },
-					{ name = BI["Potion"], OnClick = function() Altoholic:SearchItem(BI["Consumable"], BI["Potion"]) end },
-					{ name = BI["Elixir"], OnClick = function() Altoholic:SearchItem(BI["Consumable"], BI["Elixir"]) end },
-					{ name = BI["Flask"], OnClick = function() Altoholic:SearchItem(BI["Consumable"], BI["Flask"]) end },
-					{ name = BI["Bandage"], OnClick = function() Altoholic:SearchItem(BI["Consumable"], BI["Bandage"]) end },
-					{ name = BI["Scroll"], OnClick = function() Altoholic:SearchItem(BI["Consumable"], BI["Scroll"]) end },
-					{ name = BI["Other"], OnClick = function() Altoholic:SearchItem(BI["Consumable"], BI["Other"]) end }
-				},
-				OnClick = function() Altoholic:Menu_Update(MENU_SEARCH, 3 )	end
+				subMenu = {},
+				OnClick = function() Altoholic:SearchItem(BI["Consumable"])	end
 			},
 			{ name = BI["Trade Goods"],	isCollapsed = true,
-				subMenu = {
-					{ name = L["Any"], OnClick = function()	Altoholic:SearchItem(BI["Trade Goods"]) end },
-					{ name = BI["Elemental"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Elemental"]) end },
-					{ name = BI["Cloth"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Cloth"]) end },
-					{ name = BI["Leather"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Leather"]) end },
-					{ name = BI["Metal & Stone"],	OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Metal & Stone"]) end },
-					{ name = BI["Meat"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Meat"])	end },
-					{ name = BI["Herb"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Herb"])	end },
-					{ name = BI["Enchanting"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Enchanting"])	end },
-					{ name = BI["Parts"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Parts"]) end },
-					{ name = BI["Devices"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Devices"]) end },
-					{ name = BI["Explosives"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Explosives"])	end },
-					{ name = BI["Other"], OnClick = function() Altoholic:SearchItem(BI["Trade Goods"], BI["Other"]) end }
-				},
-				OnClick = function() Altoholic:Menu_Update(MENU_SEARCH, 4 )	end
+				subMenu = {},
+				OnClick = function()	Altoholic:SearchItem(BI["Trade Goods"])	end
 			},
 			{ name = BI["Recipe"], isCollapsed = true,
 				subMenu = {
@@ -129,7 +110,7 @@ Altoholic.Menu = {
 					{ name = BI["Cooking"], OnClick = function() Altoholic:SearchItem(BI["Recipe"], BI["Cooking"]) end },
 					{ name = BI["First Aid"],	OnClick = function() Altoholic:SearchItem(BI["Recipe"], BI["First Aid"]) end }
 				},
-				OnClick = function() Altoholic:Menu_Update(MENU_SEARCH, 6 )	end
+				OnClick = function() Altoholic:Menu_Update(MENU_SEARCH, 5 )	end
 			}
 		},
 		OnClick = function() Altoholic:Menu_Update(MENU_SEARCH) end
@@ -281,11 +262,6 @@ Altoholic.equipment = {
 	{ color = WHITE, name = BI["Tabard"], icon = "Interface\\PaperDoll\\UI-PaperDoll-Slot-Tabard"}
 }
 
-local INFO_REALM_LINE = 1
-local INFO_CHARACTER_LINE = 2
-local INFO_TOTAL_LINE = 3
-local LEVEL_CAP = 60
-
 function Altoholic:OnInitialize()
 end
 
@@ -309,9 +285,9 @@ function Altoholic:OnEnable()
 	self:RegisterEvent("MAIL_CLOSED")
 	self:RegisterEvent("AceEvent_FullyInitialized")
 	getglobal("AltoholicFrameName"):SetText("Altoholic |cFFFFFFFF"..V.version)
-	V.player = UnitName("player")
-	V.realm = GetRealmName()
 	V.faction = UnitFactionGroup("player")
+    V.realm = GetRealmName()
+  	V.player = UnitName("player")
 	V.alt = V.player
 	if self.db.account.data[V.faction][V.realm].char[V.player].playtime == nil then
 		RequestTimePlayed()
@@ -711,7 +687,16 @@ end
 
 function Altoholic:UpdatePlayerBag(bagID)
 	if bagID < 0 then return end
-	local b = self.db.account.data[V.faction][V.realm].char[V.player].bag["Bag" .. bagID]
+    local c = self.db.account.data[V.faction][V.realm].char
+	local b = c[V.player].bag["Bag" .. bagID]
+    if c[0] then
+        c[0] = {}
+        c[0] = nil
+    end
+    if b[0] then
+        b[0] = {}
+        b[0] = nil
+    end
 	if bagID == 0 then	-- Bag 0
 		b.icon = "Interface\\Buttons\\Button-Backpack-Up";
 		b.link = nil;
@@ -916,7 +901,7 @@ function Altoholic:SelectAlt(id)
 end
 
 function Altoholic:BuildContainersSubMenu()
-	self:ClearTable(self.Menu[MENU_CONTAINERS].subMenu)
+    self.Menu[MENU_CONTAINERS].subMenu = {}
 	local n = 1
 	for FactionName, f in pairs(self.db.account.data) do
 		for RealmName, r in pairs(f) do
@@ -950,7 +935,6 @@ function Altoholic:BuildContainersSubMenu()
 end
 
 function Altoholic:BuildMailSubMenu()
-	--self:ClearTable(self.Menu[MENU_MAIL].subMenu)
     self.Menu[MENU_MAIL].subMenu = {}
 	local n = 1
 	for FactionName, f in pairs(self.db.account.data) do
@@ -986,7 +970,6 @@ function Altoholic:BuildMailSubMenu()
 end
 
 function Altoholic:BuildEquipmentSubMenu()
-	--self:ClearTable(self.Menu[MENU_EQUIPMENT].subMenu)
     self.Menu[MENU_EQUIPMENT].subMenu = {}
 	local n = 1
 	for FactionName, f in pairs(self.db.account.data) do
@@ -1008,7 +991,6 @@ function Altoholic:BuildEquipmentSubMenu()
 end
 
 function Altoholic:BuildQuestsSubMenu()
-	--self:ClearTable(self.Menu[MENU_QUESTS].subMenu)
     self.Menu[MENU_QUESTS].subMenu = {}
 	local n = 1
 	for FactionName, f in pairs(self.db.account.data) do
@@ -1040,7 +1022,7 @@ function Altoholic:BuildQuestsSubMenu()
 end
 
 function Altoholic:BuildRecipesSubMenu()
-	--self:ClearTable(self.Menu[MENU_RECIPES].subMenu)
+    self.Menu[MENU_RECIPES].subMenu = nil
     self.Menu[MENU_RECIPES].subMenu = {}
 	self.Menu[MENU_RECIPES].isCollapsed = true
 	local n = 1
@@ -1055,7 +1037,6 @@ function Altoholic:BuildRecipesSubMenu()
 				OnClick = function(self) Altoholic:Menu_Update(MENU_RECIPES, realmsID)	end
 			} )
 			local i = 1
-            local altID
 			for CharacterName, c in pairs(r.char) do
                 local altID = (n * 100) + i
 				table.insert(self.Menu[MENU_RECIPES].subMenu[n].subMenu, {
@@ -1072,7 +1053,6 @@ function Altoholic:BuildRecipesSubMenu()
 					end
 				} )
 				for TradeSkillName, _ in pairs(c.recipes) do
-                    local altID = (n * 100) + i
                     local skillsID = Altoholic:GetProfessionID(TradeSkillName) + (n * 10000) + (i * 100)
                     table.insert(self.Menu[MENU_RECIPES].subMenu[n].subMenu[i].subMenu, {
                         name = TradeSkillName,
@@ -1095,7 +1075,6 @@ function Altoholic:BuildRecipesSubMenu()
 end
 
 function Altoholic:BuildAuctionsSubMenu()
-    --self:ClearTable(self.Menu[MENU_AUCTIONS].subMenu)
     self.Menu[MENU_AUCTIONS].subMenu = {}
     local n = 1
 	for FactionName, f in pairs(self.db.account.data) do
@@ -1172,7 +1151,7 @@ end
 function Altoholic:BuildFactionsTable()
 	local repDB = self.db.account.data[V.faction][V.realm].reputation
 	if V.Factions then
-		self:ClearTable(V.Factions)
+        Altoholic.vars.Factions = {}
 	else
 		V.Factions = {}
 	end
@@ -1255,19 +1234,6 @@ function Altoholic:SelectProfession(id)
             local rank, maxRank = Altoholic:strsplit("|", ProfessionLevel)
             V.CurrentProfessionLevel = Altoholic:GetSkillColor(tonumber(rank)) .. rank .. "/" .. maxRank
         end
-    end
-end
-
--- *** Utility functions ***
-function Altoholic:ClearTable(t)
-	if type(t) ~= "table" then
-		return
-	end
-    for k in pairs (t) do
-        if type(t[k]) == "table" then
-            self:ClearTable(t[k])
-        end
-        t[k] = {}
     end
 end
 
@@ -1668,18 +1634,18 @@ function Altoholic:HookTooltip()
                 else
                     V.ToolTipCachedTotal = nil
                 end
-            end		
+            end
             if (AltoOptions_TooltipCount:GetChecked()) and (V.ToolTipCachedCount > 0) then
                 GameTooltip:AddLine(" ",1,1,1);
                 for CharacterName, c in pairs (V.ItemCount) do
                     GameTooltip:AddDoubleLine(CharacterName .. ":",  TEAL .. c);
                 end
-            end 
+            end
             if (AltoOptions_TooltipTotal:GetChecked()) and (V.ToolTipCachedTotal) then
                 GameTooltip:AddLine(V.ToolTipCachedTotal,1,1,1);
-            end		
+            end
+            GameTooltip:Show()
         end
-        GameTooltip:Show()        
     end)
 end
 
@@ -1688,12 +1654,12 @@ function Altoholic:RecipeOrBook(ttname)
     if ttname then
         local isMatch = nil
         local rb = Altoholic.RecipesBooks
-        for r = 1, 4 do
+        for r = 1, 5 do
             if string.find(ttname, rb[r]) then
                 isMatch = "isRecipe"
             end
         end
-        for b = 5, 16 do
+        for b = 6, 17 do
             if string.find(ttname, rb[b]) then
                 isMatch = "isBook"
             end
@@ -1703,6 +1669,22 @@ function Altoholic:RecipeOrBook(ttname)
         end
     else
         return nil
+    end
+end
+
+function Altoholic:AltHasTradeSkill(c, prof)
+    local r = self.db.account.data[V.faction][V.realm].char[c]
+    if c then
+        local minSkillp, _ = Altoholic:GetSkillInfo(r.skill[L["Professions"]][prof])
+        if minSkillp > 0 then
+            return true
+        end      
+        local minSkills, _ = Altoholic:GetSkillInfo(r.skill[L["Secondary Skills"]][prof])
+        if minSkills > 0 then
+            return true
+        end
+    else
+        return false
     end
 end
 
@@ -1742,16 +1724,25 @@ function Altoholic:WhoKnowsRecipe(tooltip)
                     book = book .. ttlines
                 end
             end
-            GameTooltip:AddLine(" ",1,1,1)
-            GameTooltip:AddLine(book,1,1,1)
-        end                       
+            if book then
+                GameTooltip:AddLine(" ",1,1,1)
+                GameTooltip:AddLine(book,1,1,1)
+            end
+        end
     elseif Altoholic:RecipeOrBook(ttname) == "isRecipe" then
-        local recipeName, ttProfession, profName, profLevel, recipe
+        local recipeName, ttProfession, profName, profLevel, recipeTT, msg
         _, _, recipeName = string.find(ttname, ".*:%s(.+)")
         ttProfession = getglobal('GameTooltipTextLeft2'):GetText()
         _, _, profName, profLevel = string.find(ttProfession, ".*%s(.+)%s%((.+)%)")
-        profLevel = tonumber(profLevel)    
+        profLevel = tonumber(profLevel)
         for CharacterName, c in pairs(Altoholic.db.account.data[V.faction][V.realm].char) do
+            if Altoholic:AltHasTradeSkill(CharacterName, profName) and c.recipes[profName].ScanFailed then
+                GameTooltip:AddLine(" ",1,1,1)
+                GameTooltip:AddLine("------------------------------------------------",1,1,1)
+                GameTooltip:AddLine("Recipe database is empty for " .. CharacterName .. ".",1,0,0)
+                GameTooltip:AddLine("Please open your " .. profName .. " tradeskill.",1,0,0)
+                GameTooltip:AddLine("------------------------------------------------",1,1,1)
+            end
             for ProfessionName, p in pairs(c.recipes) do
                 if ProfessionName == profName then
                     local isKnownByChar = false
@@ -1764,7 +1755,7 @@ function Altoholic:WhoKnowsRecipe(tooltip)
                             end
                         end
                     end
-                    local ttlines
+                    local ttlines = nil
                     if isKnownByChar then
                         ttlines = TEAL .. L["Already known by "] .. WHITE .. CharacterName .. "\n"
                     else
@@ -1776,22 +1767,24 @@ function Altoholic:WhoKnowsRecipe(tooltip)
                         else
                             curRank = Altoholic:GetSkillInfo( c.skill[L["Professions"]][ProfessionName] )
                         end
-                        if curRank < profLevel then
+                        if curRank < profLevel and curRank > 0 then
                             ttlines = RED .. L["Will be learnable by "] .. WHITE .. CharacterName .. YELLOW .. " ("..curRank..")" .. "\n"
-                        else
+                        elseif curRank > profLevel then
                             ttlines = YELLOW .. L["Could be learned by "] .. WHITE .. CharacterName .. "\n"
                         end
-                    end                
-                    if recipe == nil then
-                        recipe = ttlines
-                    else
-                        recipe = recipe .. ttlines
                     end
-                end
+                    if recipeTT == nil then
+                        recipeTT = ttlines
+                    else
+                        recipeTT = recipeTT .. ttlines
+                    end
+                end                
             end
         end
-        GameTooltip:AddLine(" ",1,1,1)
-        GameTooltip:AddLine(recipe,1,1,1)
+        if recipeTT then
+            GameTooltip:AddLine(" ",1,1,1)
+            GameTooltip:AddLine(recipeTT,1,1,1)
+        end
     end
     GameTooltip:Show()
 end
@@ -1807,7 +1800,6 @@ function Altoholic:PLAYER_ALIVE()
 end
 
 function Altoholic:AceEvent_FullyInitialized()
-    self:UpdatePlayerBags()
 	self:RegisterEvent("BAG_UPDATE")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
@@ -1816,6 +1808,13 @@ function Altoholic:AceEvent_FullyInitialized()
 	self:RegisterEvent("CRAFT_SHOW")
 	self:RegisterEvent("CRAFT_CLOSE")
 	self:RegisterEvent("LEARNED_SPELL_IN_TAB")
+	local c = self.db.account.data[V.faction][V.realm].char[V.player]
+	c.level = UnitLevel("player")
+	c.race = UnitRace("player")
+	c.class = UnitClass("player")
+	self:UpdatePlayerStats()
+	self:UpdateTalents()
+    self:UpdatePlayerBags()
 	self:BuildUnsafeItemList()
     self:HookTooltip()
 end

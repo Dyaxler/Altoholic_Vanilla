@@ -1,7 +1,6 @@
 local BF = LibStub("LibBabble-Faction-3.0"):GetLookupTable()
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
-
 local WHITE		= "|cFFFFFFFF"
 local GREEN		= "|cFF00FF00"
 local TEAL		= "|cFF00FF9A"

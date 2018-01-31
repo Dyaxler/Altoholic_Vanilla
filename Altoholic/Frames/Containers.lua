@@ -1,8 +1,6 @@
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
 
---local _G = getfenv(0)
-
 function Altoholic:Containers_Update()
 	local VisibleLines = 7
 	local frame = "Containers"
