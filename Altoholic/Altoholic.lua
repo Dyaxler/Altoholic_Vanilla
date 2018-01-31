@@ -1659,7 +1659,6 @@ function Altoholic:HookTooltip()
         Altoholic:WhoKnowsRecipe(index)
     end)
     self:SecureHook(GameTooltip, "Show", function(tooltip)
-        DEFAULT_CHAT_FRAME:AddMessage("GameTooltip Show Fired!", 0.5, 0.5, 1)
         local itemID = Altoholic:IsGatheringNode(getglobal("GameTooltipTextLeft1"):GetText() )
         if itemID then
             if AltoOptions_TooltipCount:GetChecked() or AltoOptions_TooltipTotal:GetChecked() then
