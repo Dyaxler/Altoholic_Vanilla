@@ -2204,7 +2204,7 @@ function AcquireDetachedFrame(self, registration, data, detachedData)
 		detached.menu = nil
 		detached.detachedData.detached = nil
 		detached:SetOwner(nil)
-		detached.notInUse = TRUE
+		detached.notInUse = true
 	end
 
 	return AcquireDetachedFrame(self, registration, data, detachedData)

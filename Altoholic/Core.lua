@@ -68,6 +68,27 @@ Altoholic.Categories = {
 	"Skills"
 }
 
+Altoholic.RecipesBooks = {
+    --Craft Recipes:
+    "Pattern:",
+    "Plans:",
+    "Formula:",
+    "Schematic:",
+    --Class Books:
+    "Book of",
+    "Book:",
+    "Codex of",
+    "Codex:",
+    "Grimoire of",
+    "Grimoire:",
+    "Guide:",
+    "Handbook of",
+    "Libram:",
+    "Manual of",
+    "Tablet of",
+    "Tome of"
+}
+
 Altoholic.XPToNext	= { 
 -- From: http://www.wowwiki.com/Formulas:XP_To_Level, retrieved Feb 6, 2008
 -- read: at XPToNext[1], you need 400 xp to get to 2
@@ -158,6 +179,12 @@ Altoholic:RegisterDefaults('account', {
 							['*'] = {			-- "Professions"
 								['*'] = nil
 							}
+						},
+						spells = {
+                            ['*'] = {
+                                name = nil,
+                                rank = nil
+                            }
 						},
 						inventory = {},		-- 19 inventory slots, a simple table containing item id's
 						SavedInstance = {},	-- raid timers

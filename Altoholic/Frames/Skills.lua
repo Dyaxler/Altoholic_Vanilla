@@ -365,3 +365,10 @@ function Altoholic:CRAFT_CLOSE()
 	end
 	self:UpdatePlayerSkills()
 end
+
+function Altoholic:LEARNED_SPELL_IN_TAB()
+	if self:IsEventRegistered("LEARNED_SPELL_IN_TAB") then
+		self:UnregisterEvent("LEARNED_SPELL_IN_TAB")
+	end
+	self:UpdatePlayerSpells()
+end
