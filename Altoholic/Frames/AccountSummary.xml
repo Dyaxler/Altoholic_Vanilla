@@ -130,7 +130,7 @@
 						this:RegisterForClicks("LeftButtonDown", "RightButtonDown");
 					</OnLoad>
 					<OnClick>
-						Altoholic_AccountSummaryLevel_OnClick(this, button)
+						Altoholic_AccountSummaryLevel_OnClick(arg1, this:GetID())
 					</OnClick>
 					<OnEnter>
 						Altoholic_AccountSummaryLevel_OnEnter(this)

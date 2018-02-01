@@ -80,16 +80,15 @@ function Altoholic:Equipment_Update()
 end
 
 function Altoholic_Equipment_OnEnter()
-    local self = this
-	--if not self then return end
+    if not this then return end
 	local r = Altoholic.db.account.data[V.CurrentFaction][V.CurrentRealm]		-- this realm
-	local itemID = self:GetParent():GetID()
+	local itemID = this:GetParent():GetID()
 	if itemID == 0 then		-- class icon
-		Altoholic:DrawCharacterTooltip(self.CharName)
+		Altoholic:DrawCharacterTooltip(this.CharName)
 		return
 	end
-    if not self.CharName then return end
-	local item = r.char[self.CharName].inventory[itemID]	--  equipment slot
+    if not this.CharName then return end
+	local item = r.char[this.CharName].inventory[itemID]	--  equipment slot
 	--if not item then return end
 	GameTooltip:SetOwner(this, "ANCHOR_LEFT");
 	if type(item) == "number" then
@@ -104,13 +103,13 @@ function Altoholic_Equipment_OnEnter()
 end
 
 function Altoholic_Equipment_OnClick()
-    local self = this
+    if not this then return end
 	local r = Altoholic.db.account.data[V.CurrentFaction][V.CurrentRealm]		-- this realm
-	local itemID = self:GetParent():GetID()
+	local itemID = this:GetParent():GetID()
 
 	if itemID == 0 then return end		-- class icon
-	if not self.CharName then return end
-	local item = r.char[self.CharName].inventory[itemID]	--  equipment slot
+	if not this.CharName then return end
+	local item = r.char[this.CharName].inventory[itemID]	--  equipment slot
 	if not item then return end
 	
 	local link
@@ -122,8 +121,8 @@ function Altoholic_Equipment_OnClick()
 	local button = arg1
 	if button == "RightButton" then
 		V.UpgradeItemID = Altoholic:GetIDFromLink(link)		-- item ID of the item to find an upgrade for
-		V.CharacterClass = Altoholic.Classes[ r.char[self.CharName].class ]
-		ToggleDropDownMenu(1, nil, EquipmentRightClickMenu, self:GetName(), 0, -5);
+		V.CharacterClass = Altoholic.Classes[ r.char[this.CharName].class ]
+		ToggleDropDownMenu(1, nil, EquipmentRightClickMenu, this:GetName(), 0, -5);
 		return
 	end
 	

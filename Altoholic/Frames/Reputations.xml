@@ -39,7 +39,7 @@
 		</Layers>
 		<Scripts>
 			<OnLoad>
-				this:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+				this:RegisterForClicks("LeftButtonDown", "RightButtonDown");
 			</OnLoad>
 			<OnEnter>
 				Altoholic_Reputations_OnEnter(this)

@@ -18,7 +18,7 @@
 				this:RegisterForDrag("RightButton")
 			</OnLoad>
 			<OnClick>
-				Altoholic_MiniMapButton_OnClick(arg1)
+				Altoholic_MiniMapButton_OnClick(arg1, this:GetID())
 			</OnClick>
 			<OnUpdate>
 				if(this.isMoving == true) then

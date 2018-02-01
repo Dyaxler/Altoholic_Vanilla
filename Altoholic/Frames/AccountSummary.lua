@@ -163,8 +163,9 @@ function Altoholic_AccountSummaryLevel_OnEnter(self)
 	AltoTooltip:Show();
 end
 
-function Altoholic_AccountSummaryLevel_OnClick(self, button)
-	local line = self:GetParent():GetID()
+function Altoholic_AccountSummaryLevel_OnClick(button, id)
+    if not this then return end
+	local line = this:GetParent():GetID()
 	if line == 0 then return end
 	local s = Altoholic.CharacterInfo[line]
 	if s.linetype ~= INFO_CHARACTER_LINE then		
@@ -172,7 +173,7 @@ function Altoholic_AccountSummaryLevel_OnClick(self, button)
 	end
 	if button == "RightButton" then
 		V.CharInfoLine = line	-- line containing info about the alt on which action should be taken (delete, ..)
-		ToggleDropDownMenu(1, nil, AccountSummaryRightClickMenu, self:GetName(), 0, -5);
+		ToggleDropDownMenu(1, nil, AccountSummaryRightClickMenu, this:GetName(), 0, -5);
 		return
 	elseif button == "LeftButton" then
 		V.CurrentFaction, V.CurrentRealm = Altoholic:GetCharacterInfo(line)
@@ -182,8 +183,6 @@ function Altoholic_AccountSummaryLevel_OnClick(self, button)
 		Altoholic:ActivateMenuItem("Containers")
 	end
 end
-
-UIDropDownMenu_CreateInfo = UIDropDownMenu_CreateInfo or loadstring("local t = {} return function() for k in pairs(t) do t[k] = nil end return t end")()
 
 function Summary_RightClickMenu_OnLoad()
 	local info = UIDropDownMenu_CreateInfo(); 
@@ -238,27 +237,31 @@ end
 
 function Altoholic_DeleteAlt()
 	local line = V.CharInfoLine
+    V.CharInfoLine = {}
 	V.CharInfoLine = nil
 	local s = Altoholic.CharacterInfo[line] -- no validity check, this comes from the dropdownmenu, it's been secured earlier
 	local AltName = s.name
 	local Faction, Realm = Altoholic:GetCharacterInfo(line)
 	local r = Altoholic.db.account.data[Faction][Realm]
-	if (Faction == V.faction) and	(Realm == V.realm) and (AltName == V.player) then
+	if (Faction == V.faction) and (Realm == V.realm) and (AltName == V.player) then
 		DEFAULT_CHAT_FRAME:AddMessage(TEAL .. "Altoholic: " .. WHITE .. L["Cannot delete current character"])
 		return
 	end
 	-- delete factions
 	for RepName, RepTable in pairs(r.reputation) do
+        RepTable[s.name] = {}
 		RepTable[s.name] = nil
 	end
 	-- delete the character
     r.char[s.name] = {}
+    r.char[s.name] = nil
 	local charCount = 0
 	for _, _ in pairs(r.char) do
 		charCount = charCount + 1
 	end
 	if charCount == 0 then
         Altoholic.db.account.data[Faction][Realm] = {}
+        Altoholic.db.account.data[Faction][Realm] = nil
 	end
 	local realmCount = 0			
 	for _, _ in pairs(Altoholic.db.account.data[Faction]) do

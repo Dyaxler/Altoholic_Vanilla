@@ -138,18 +138,17 @@ function Altoholic:Reputations_Update()
 end
 
 function Altoholic_Reputations_OnEnter()
-    local self = this
-    if not self then return end
-	local repID = self:GetParent():GetID()
+    if not this then return end
+	local repID = this:GetParent():GetID()
 	if repID == 0 then		-- class icon
 		V.CurrentFaction = V.faction
 		V.CurrentRealm = V.realm
-		Altoholic:DrawCharacterTooltip(self.CharName)
+		Altoholic:DrawCharacterTooltip(this.CharName)
 		return
 	end
 	local r = Altoholic.db.account.data[V.faction][V.realm]
 	local repName = V.Factions[repID]
-	local charName = self.CharName
+	local charName = this.CharName
 	local c = Altoholic.db.account.data[V.faction][V.realm].char[charName]
 	local bottom, top, earned, rate = Altoholic:GetReputationInfo( r.reputation[repName][charName] )
 	AltoTooltip:SetOwner(this, "ANCHOR_LEFT");
@@ -168,23 +167,22 @@ function Altoholic_Reputations_OnEnter()
 	AltoTooltip:Show();
 end
 
-function Altoholic_Reputations_OnClick(button, id)
-    local self = this
+function Altoholic_Reputations_OnClick()
+	if not this then return end
     local button = arg1
-	if not self then return end
-	local repID = self:GetParent():GetID()
+	local repID = this:GetParent():GetID()
 	if repID == 0 then
-		Altoholic:DrawCharacterTooltip(self.CharName)
+		Altoholic:DrawCharacterTooltip(this.CharName)
 		return
 	end
 	local r = Altoholic.db.account.data[V.faction][V.realm]
-	local bottom, top, earned = Altoholic:GetReputationInfo( r.reputation[V.Factions[repID]][self.CharName] )
+	local bottom, top, earned = Altoholic:GetReputationInfo( r.reputation[V.Factions[repID]][this.CharName] )
 	local repLevel = Altoholic:GetRepLevelString(bottom)
-    if ( button == "LeftButton" ) and ( IsShiftKeyDown() ) then
+    if button == "LeftButton" and IsShiftKeyDown() then
         if ( ChatFrameEditBox:IsShown() ) then
-            ChatFrameEditBox:Insert(self.CharName .. L[" is "] .. repLevel .. L[" with "] .. V.Factions[repID] .. " (" .. (earned - bottom) .. "/" .. (top - bottom) .. ")");
+            ChatFrameEditBox:Insert(this.CharName .. L[" is "] .. repLevel .. L[" with "] .. V.Factions[repID] .. " (" .. (earned - bottom) .. "/" .. (top - bottom) .. ")");
         elseif (WIM_EditBoxInFocus) then
-            WIM_EditBoxInFocus:Insert(self.CharName .. L[" is "] .. repLevel .. L[" with "] .. V.Factions[repID] .. " (" .. (earned - bottom) .. "/" .. (top - bottom) .. ")");
+            WIM_EditBoxInFocus:Insert(this.CharName .. L[" is "] .. repLevel .. L[" with "] .. V.Factions[repID] .. " (" .. (earned - bottom) .. "/" .. (top - bottom) .. ")");
         end
 	end
 end
