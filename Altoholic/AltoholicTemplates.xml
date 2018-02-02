@@ -22,7 +22,7 @@
 				GameTooltip:Hide();
 			</OnLeave>
 			<OnClick>
-				Altoholic:Item_OnClick(this, button, this:GetParent():GetID(), this:GetID())
+				Altoholic:Item_OnClick(arg1, this:GetID())
 			</OnClick>
 		</Scripts>
 	</Button>
