@@ -47,9 +47,3 @@ ex:
 A maximum of two words is allowed after the command, so you could type:
 /alto search primal mana 		... and get only those primals in the search results.
 This should cover most of the searches you can do via the command line, if you actually need something more complicated, please use the UI.
-
-Known bugs/missing functionalities (v1.0):
-- When hovering over a recipe it's injecting two lines into the tooltip
-
-To do:
-- Add support for Spell Books I.E. Codex: Prayer of Fortitude
