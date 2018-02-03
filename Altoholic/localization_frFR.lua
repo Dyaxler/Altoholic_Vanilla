@@ -699,7 +699,7 @@ XML_TEXT_20 = "Afficher la source de l'objet";
 XML_TEXT_21 = "Afficher le décompte par personnage";
 XML_TEXT_22 = "Afficher le décompte total";
 XML_TEXT_23 = "Inclure la banque de guilde";
-XML_TEXT_24 = "Inclure Déjà Connu/Peut être appris par";
+XML_TEXT_24 = "Inclure Déjà Connu";
 XML_TEXT_25 = "AutoQuery server |cFFFF0000(risques de déconnexion)";
 XML_TEXT_26 = "|cFFFFFFFFSi un objet n'existant pas dans le cache local\n"
 				.. "est rencontré lors d'une recherche dans la table des loots,\n"
@@ -709,4 +709,5 @@ XML_TEXT_26 = "|cFFFFFFFFSi un objet n'existant pas dans le cache local\n"
 				.. "Il existe un risque de déconnexion si l'objet\n"
 				.. "est un loot d'une instance haut niveau.\n\n"
 				.. "|cFF00FF00Désactiver|r pour éviter ce risque";
+XML_TEXT_27 = "Inclure Peut être appris par";
 end

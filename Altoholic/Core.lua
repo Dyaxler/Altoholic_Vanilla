@@ -116,7 +116,8 @@ Altoholic:RegisterDefaults('account', {
 		TooltipSource = 1,
 		TooltipCount = 1,
 		TooltipTotal = 1,
-		TooltipRecipeInfo = 1,
+		TooltipAlreadyKnown = 0,
+        TooltipLearnableBy = 1,
 		ShowMinimap = 1,
 		SearchAutoQuery = 0,
 		TotalLoots = 0,					-- make at least one search in the loot tables to initialize these values

@@ -686,6 +686,7 @@
 				<Scripts>
 					<OnLoad>
 						getglobal(this:GetName().."Text"):SetText(XML_TEXT_MAIN_WINDOW_7);
+						AltoholicFrame_CheckButton3:SetChecked(1);
 					</OnLoad>
 				</Scripts>
 			</CheckButton>

@@ -350,7 +350,8 @@ function Altoholic:OnEnable()
 	getglobal("AltoOptions_TooltipSource"):SetChecked(O.TooltipSource)
 	getglobal("AltoOptions_TooltipCount"):SetChecked(O.TooltipCount)
 	getglobal("AltoOptions_TooltipTotal"):SetChecked(O.TooltipTotal)
-	getglobal("AltoOptions_TooltipRecipeInfo"):SetChecked(O.TooltipRecipeInfo)
+	getglobal("AltoOptions_TooltipAlreadyKnown"):SetChecked(O.TooltipAlreadyKnown)
+    getglobal("AltoOptions_TooltipLearnableBy"):SetChecked(O.TooltipLearnableBy)
 	getglobal("AltoOptions_ShowMinimap"):SetChecked(O.ShowMinimap)
 	getglobal("AltoOptions_SortDescending"):SetChecked(O.SortDescending)
 	getglobal("AltoOptions_RestXPMode"):SetChecked(O.RestXPMode)
@@ -1269,11 +1270,13 @@ function Altoholic_GetItemLink(itemID)
 end
 
 function Altoholic:GetIDFromLink(link)
+    if not link then return end
     local _, _, itemId = string.find(link, ".*item:(%d+).*")
     return tonumber(itemId)
 end
 
 function Altoholic:GetEnchantIDFromLink(link)
+    if not link then return end
     local _, _, itemId = string.find(link, ".*(enchant:%d+).*")
     return tostring(itemId)
 end
@@ -1514,13 +1517,13 @@ function Altoholic:IsGatheringNode(name)
 	return nil
 end
 
-function Altoholic:IsKnownQuest(quest)
+function Altoholic:IsKnownQuest(quest)    
 	if not quest then return nil end
 	local bOtherCharsOnQuest
 	for CharacterName, c in pairs(self.db.account.data[V.faction][V.realm].char) do
 		if CharacterName ~= V.player then
 			for index, q in pairs(c.questlog) do
-				local altQuestName = Altoholic:GetQuestDetails(q.link)
+				local altQuestName = q.link
 				if altQuestName == quest then
 					if not bOtherCharsOnQuest then
 						ItemRefTooltip:AddLine(" ",1,1,1);
@@ -1528,6 +1531,7 @@ function Altoholic:IsKnownQuest(quest)
 						bOtherCharsOnQuest = true
 					end
 					ItemRefTooltip:AddLine(Altoholic:GetClassColor(c.class) .. CharacterName,1,1,1);
+                    ItemRefTooltip:Show();
 				end
 			end
 		end
@@ -1613,16 +1617,21 @@ end
 -- ** GameTooltip Hooks **
 function Altoholic:HookTooltip()
     self:SecureHook(GameTooltip, "SetBagItem", function(this, bag, slot)
-        Altoholic:WhoKnowsRecipe(GameTooltip)
+        Altoholic:ProcessTooltip(GameTooltip, "Game", link, bag, slot)
     end)
     self:SecureHook(GameTooltip, "SetInventoryItem", function(this, bag, slot)
-        Altoholic:WhoKnowsRecipe(GameTooltip)
+        Altoholic:ProcessTooltip(GameTooltip, "Game", link, bag, slot)
     end)
     self:SecureHook(GameTooltip, "SetInboxItem", function(index)
-        Altoholic:WhoKnowsRecipe(index)
+        Altoholic:ProcessTooltip(index, "Game")
     end)
-    self:SecureHook(GameTooltip, "SetAuctionItem", function(index)
-        Altoholic:WhoKnowsRecipe(index)
+    self:SecureHook(GameTooltip, "SetAuctionItem", function(this, type, index)
+        local link = GetAuctionItemLink(type, index)
+        Altoholic:ProcessTooltip(GameTooltip, "Game", link)
+    end)
+    self:SecureHook("SetItemRef", function(link, name, button)
+        Altoholic:ProcessTooltip(ItemRefTooltip, "ItemRef", link)
+        Altoholic:IsKnownQuest(name)
     end)
     self:SecureHook(GameTooltip, "Show", function(tooltip)
         local itemID = Altoholic:IsGatheringNode(getglobal("GameTooltipTextLeft1"):GetText() )
@@ -1644,7 +1653,6 @@ function Altoholic:HookTooltip()
             if (AltoOptions_TooltipTotal:GetChecked()) and (V.ToolTipCachedTotal) then
                 GameTooltip:AddLine(V.ToolTipCachedTotal,1,1,1);
             end
-            GameTooltip:Show()
         end
     end)
 end
@@ -1688,17 +1696,25 @@ function Altoholic:AltHasTradeSkill(c, prof)
     end
 end
 
-function Altoholic:WhoKnowsRecipe(tooltip)
+function Altoholic:WhoKnowsRecipe(tooltip, ttype)
+    if (AltoOptions_TooltipAlreadyKnown:GetChecked() or AltoOptions_TooltipLearnableBy:GetChecked()) == nil then return end
     if tooltip == nil then return end
-    local ttname = getglobal('GameTooltipTextLeft1'):GetText()
+    if ttype == "Game" then
+        local ttype = "Game"
+        self = GameTooltip
+    elseif ttype == "ItemRef" then
+        local ttype = "ItemRef"
+        self = ItemRefTooltip
+    end
+    local ttname = getglobal(ttype..'TooltipTextLeft1'):GetText()
     if ttname == nil then return end
     if Altoholic:RecipeOrBook(ttname) == "isBook" then
-        local ttuse = getglobal('GameTooltipTextLeft4'):GetText()
+        local ttuse = getglobal(ttype..'TooltipTextLeft4'):GetText()
         local spellName, reqClass, reqLevel
-        if string.find(ttuse, "%sTeaches") and not string.find(getglobal('GameTooltipTextLeft4'):GetText(), USED) then
+        if string.find(ttuse, "%sTeaches") and not string.find(getglobal(ttype..'TooltipTextLeft4'):GetText(), USED) then
             _, _, spellName = string.find(ttuse, ".*Teaches%s(.+%s%(.+%))")
-            _, _, reqClass = string.find(getglobal('GameTooltipTextLeft2'):GetText(), string.gsub(ITEM_CLASSES_ALLOWED,"%%s","(.+)"))
-            _, _, reqLevel = string.find(getglobal('GameTooltipTextLeft3'):GetText(), string.gsub(ITEM_MIN_LEVEL,"%%d","(.+)"))
+            _, _, reqClass = string.find(getglobal(ttype..'TooltipTextLeft2'):GetText(), string.gsub(ITEM_CLASSES_ALLOWED,"%%s","(.+)"))
+            _, _, reqLevel = string.find(getglobal(ttype..'TooltipTextLeft3'):GetText(), string.gsub(ITEM_MIN_LEVEL,"%%d","(.+)"))
             local book
             for CharacterName, c in pairs(Altoholic.db.account.data[V.faction][V.realm].char) do
                 local isNotKnownByChar = false
@@ -1710,13 +1726,21 @@ function Altoholic:WhoKnowsRecipe(tooltip)
                 end
                 local ttlines
                 if isNotKnownByChar and reqClass == c.class then
-                    if c.level < tonumber(reqLevel) then
-                        ttlines = RED .. L["Will be learnable by "] .. WHITE .. CharacterName .. YELLOW .. " ("..c.level..")" .. "\n"
+                    if AltoOptions_TooltipLearnableBy:GetChecked() then
+                        if c.level < tonumber(reqLevel) then
+                            ttlines = RED .. L["Will be learnable by "] .. WHITE .. CharacterName .. YELLOW .. " ("..c.level..")" .. "\n"
+                        else
+                            ttlines = YELLOW .. L["Could be learned by "] .. WHITE .. CharacterName .. "\n"
+                        end
                     else
-                        ttlines = YELLOW .. L["Could be learned by "] .. WHITE .. CharacterName .. "\n"
+                        ttlines = ""
                     end
                 elseif reqClass == c.class then
-                    ttlines = TEAL .. L["Already known by "] .. WHITE .. CharacterName .. "\n"
+                    if AltoOptions_TooltipAlreadyKnown:GetChecked() then 
+                        ttlines = TEAL .. L["Already known by "] .. WHITE .. CharacterName .. "\n"
+                    else
+                        ttlines = ""
+                    end
                 end
                 if book == nil then
                     book = ttlines
@@ -1725,23 +1749,23 @@ function Altoholic:WhoKnowsRecipe(tooltip)
                 end
             end
             if book then
-                GameTooltip:AddLine(" ",1,1,1)
-                GameTooltip:AddLine(book,1,1,1)
+                self:AddLine(" ",1,1,1)
+                self:AddLine(book,1,1,1)
             end
         end
-    elseif Altoholic:RecipeOrBook(ttname) == "isRecipe" then
+    elseif Altoholic:RecipeOrBook(ttname) == "isRecipe" then        
         local recipeName, ttProfession, profName, profLevel, recipeTT, msg
         _, _, recipeName = string.find(ttname, ".*:%s(.+)")
-        ttProfession = getglobal('GameTooltipTextLeft2'):GetText()
+        ttProfession = getglobal(ttype..'TooltipTextLeft2'):GetText()
         _, _, profName, profLevel = string.find(ttProfession, ".*%s(.+)%s%((.+)%)")
         profLevel = tonumber(profLevel)
         for CharacterName, c in pairs(Altoholic.db.account.data[V.faction][V.realm].char) do
             if Altoholic:AltHasTradeSkill(CharacterName, profName) and c.recipes[profName].ScanFailed then
-                GameTooltip:AddLine(" ",1,1,1)
-                GameTooltip:AddLine("------------------------------------------------",1,1,1)
-                GameTooltip:AddLine("Recipe database is empty for " .. CharacterName .. ".",1,0,0)
-                GameTooltip:AddLine("Please open your " .. profName .. " tradeskill.",1,0,0)
-                GameTooltip:AddLine("------------------------------------------------",1,1,1)
+                self:AddLine(" ",1,1,1)
+                self:AddLine("------------------------------------------------",1,1,1)
+                self:AddLine("Recipe database is empty for " .. CharacterName .. ".",1,0,0)
+                self:AddLine("Please open your " .. profName .. " tradeskill.",1,0,0)
+                self:AddLine("------------------------------------------------",1,1,1)
             end
             for ProfessionName, p in pairs(c.recipes) do
                 if ProfessionName == profName then
@@ -1757,20 +1781,28 @@ function Altoholic:WhoKnowsRecipe(tooltip)
                     end
                     local ttlines = nil
                     if isKnownByChar then
-                        ttlines = TEAL .. L["Already known by "] .. WHITE .. CharacterName .. "\n"
-                    else
-                        local curRank
-                        if (ProfessionName == BI["Cooking"]) or
-                            (ProfessionName == BI["First Aid"]) or
-                            (ProfessionName == BI["Fishing"]) then
-                            curRank = Altoholic:GetSkillInfo( c.skill[L["Secondary Skills"]][ProfessionName] )
+                        if AltoOptions_TooltipAlreadyKnown:GetChecked() then 
+                            ttlines = TEAL .. L["Already known by "] .. WHITE .. CharacterName .. "\n"
                         else
-                            curRank = Altoholic:GetSkillInfo( c.skill[L["Professions"]][ProfessionName] )
+                            ttlines = ""
                         end
-                        if curRank < profLevel and curRank > 0 then
-                            ttlines = RED .. L["Will be learnable by "] .. WHITE .. CharacterName .. YELLOW .. " ("..curRank..")" .. "\n"
-                        elseif curRank > profLevel then
-                            ttlines = YELLOW .. L["Could be learned by "] .. WHITE .. CharacterName .. "\n"
+                    else
+                        if AltoOptions_TooltipLearnableBy:GetChecked() then 
+                            local curRank
+                            if (ProfessionName == BI["Cooking"]) or
+                                (ProfessionName == BI["First Aid"]) or
+                                (ProfessionName == BI["Fishing"]) then
+                                curRank = Altoholic:GetSkillInfo( c.skill[L["Secondary Skills"]][ProfessionName] )
+                            else
+                                curRank = Altoholic:GetSkillInfo( c.skill[L["Professions"]][ProfessionName] )
+                            end
+                            if curRank < profLevel and curRank > 0 then
+                                ttlines = RED .. L["Will be learnable by "] .. WHITE .. CharacterName .. YELLOW .. " ("..curRank..")" .. "\n"
+                            elseif curRank > profLevel then
+                                ttlines = YELLOW .. L["Could be learned by "] .. WHITE .. CharacterName .. "\n"
+                            end
+                        else
+                            ttlines = ""
                         end
                     end
                     if recipeTT == nil then
@@ -1782,11 +1814,72 @@ function Altoholic:WhoKnowsRecipe(tooltip)
             end
         end
         if recipeTT then
-            GameTooltip:AddLine(" ",1,1,1)
-            GameTooltip:AddLine(recipeTT,1,1,1)
+            self:AddLine(" ",1,1,1)
+            self:AddLine(recipeTT,1,1,1)
         end
     end
-    GameTooltip:Show()
+end
+
+function Altoholic:ProcessTooltip(tooltip, ttype, link, bagID, slotID)
+    local itemID
+    if bagID == "player" then        
+        bagID = 100
+        slotID = slotID - 39
+    end
+    if link then
+        itemID = self:GetIDFromLink(link)
+    elseif bagID and slotID then
+        itemID = self.db.account.data[V.faction][V.realm].char[V.alt].bag["Bag" .. bagID].ids[slotID]
+        if itemID == nil then return end
+    end
+	if (not V.ToolTipCachedItemID) or 
+		(V.ToolTipCachedItemID and (itemID ~= V.ToolTipCachedItemID)) then
+		V.TooltipRecipeCache = nil
+        V.ItemCount = nil
+		if AltoOptions_TooltipSource:GetChecked() then
+			local Instance, Boss = self:GetItemDropLocation(itemID)
+			V.ToolTipCachedItemID = itemID
+			if (Instance == nil) then
+				V.ToolTipCachedSource = nil
+			else
+				V.ToolTipCachedSource = GOLD .. L["Source"]..  ": |cff00ff9a" .. Instance .. ": " .. Boss
+			end
+		else
+			V.ToolTipCachedSource = nil
+		end
+		if AltoOptions_TooltipCount:GetChecked() or AltoOptions_TooltipTotal:GetChecked() then
+			V.ToolTipCachedCount = self:GetItemCount(itemID)
+			if V.ToolTipCachedCount > 0 then
+				V.ToolTipCachedTotal = GOLD .. L["Total owned"] .. ": |cff00ff9a" .. V.ToolTipCachedCount
+			else
+				V.ToolTipCachedTotal = nil
+			end
+		end
+	end
+	if (AltoOptions_TooltipCount:GetChecked()) and (V.ToolTipCachedCount > 0) then
+		tooltip:AddLine(" ",1,1,1);
+		for CharacterName, c in pairs (V.ItemCount) do
+			tooltip:AddDoubleLine(CharacterName .. ":",  TEAL .. c);
+		end
+	end
+	if (AltoOptions_TooltipTotal:GetChecked()) and (V.ToolTipCachedTotal) then
+		tooltip:AddLine(V.ToolTipCachedTotal,1,1,1,true);
+	end
+	if V.ToolTipCachedSource then
+		tooltip:AddLine(" ",1,1,1);
+		tooltip:AddLine(V.ToolTipCachedSource,1,1,1,true);
+	end
+	-- Keep here if necessary, can be useful for debugging
+	-- local iLevel = select(4, GetItemInfo(itemID))
+	-- if iLevel then
+		-- tooltip:AddLine(" ",1,1,1);
+		-- tooltip:AddDoubleLine("Item ID: " .. GREEN .. itemID,  "iLvl: " .. GREEN .. iLevel);
+		-- tooltip:AddLine(TEAL .. select(10, GetItemInfo(itemID)));
+	-- end
+	if not V.TooltipRecipeCache then
+        self:WhoKnowsRecipe(tooltip, ttype)
+	end
+    tooltip:Show()
 end
 
 -- *** EVENT HANDLERS ***

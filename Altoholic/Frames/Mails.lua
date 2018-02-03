@@ -165,10 +165,8 @@ function SendMail(recipient, subject, body)
                 } )
             end
             local moneySent = GetSendMailMoney()
-            DEFAULT_CHAT_FRAME:AddMessage("GetSendMailMoney: "..moneySent, 0.5, 0.5, 1)
             local gold, silver, copper, mSent, altText, mailIcon
             if (moneySent > 0) then
-                DEFAULT_CHAT_FRAME:AddMessage("Money Sent? : Yes", 0.5, 0.5, 1)
                 copper = tostring(moneySent)
                 silver = tostring(moneySent / 100)
                 gold = tostring((moneySent - mod(moneySent, COPPER_PER_SILVER)) / 10000)

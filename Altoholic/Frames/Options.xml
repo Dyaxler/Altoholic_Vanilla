@@ -306,7 +306,7 @@
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="$parent_TooltipRecipeInfo" inherits="UICheckButtonTemplate">
+			<CheckButton name="$parent_TooltipAlreadyKnown" inherits="UICheckButtonTemplate">
 				<Size>
 					<AbsDimension x="20" y="20"/>
 				</Size>
@@ -324,9 +324,35 @@
 					<OnClick>
 						if Altoholic.db.account ~= nil then
 							if this:GetChecked() then 
-								Altoholic.db.account.options.TooltipRecipeInfo = 1
+								Altoholic.db.account.options.TooltipAlreadyKnown = 1
 							else
-								Altoholic.db.account.options.TooltipRecipeInfo = 0
+								Altoholic.db.account.options.TooltipAlreadyKnown = 0
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_TooltipLearnableBy" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors> 
+					<Anchor point="TOPLEFT" relativeTo="$parent_TooltipAlreadyKnown" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension  x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(XML_TEXT_27);
+					</OnLoad>
+					<OnClick>
+						if Altoholic.db.account ~= nil then
+							if this:GetChecked() then 
+								Altoholic.db.account.options.TooltipLearnableBy = 1
+							else
+								Altoholic.db.account.options.TooltipLearnableBy = 0
 							end
 						end
 					</OnClick>
