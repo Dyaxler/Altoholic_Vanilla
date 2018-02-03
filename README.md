@@ -1,6 +1,17 @@
 # Altoholic_Vanilla
 Altoholic for Vanilla WoW 1.12 - backported from version 2.4.015 originally written by Thaoky
 
+*Please Note:*
+- Please use the <a href="https://github.com/Dyaxler/Altoholic_Vanilla/issues">issue tracker</a> to report bugs!
+
+Screenshots:
+
+<img src="https://github.com/Dyaxler/Altoholic_Vanilla/blob/master/Screenshots/Equipment.JPG" alt="Equipment"/>
+
+<img src="https://github.com/Dyaxler/Altoholic_Vanilla/blob/master/Screenshots/Containers.JPG" alt="Containers"/>
+
+<img src="https://github.com/Dyaxler/Altoholic_Vanilla/blob/master/Screenshots/Characters_Tooltips.JPG" alt="Tooltips"/>
+
 Features:
 
 - Language supported: English and French. Although it's not fully localized for frFR, it does run well on French clients (my guildmates made sure of this :D). More languages will come soon, I'm using the LibBabble libraries more & more.
