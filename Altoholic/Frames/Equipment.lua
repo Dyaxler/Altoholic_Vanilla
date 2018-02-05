@@ -140,7 +140,7 @@ function Altoholic_Equipment_OnClick()
 end
 
 function Equipment_RightClickMenu_OnLoad()
-	local info = UIDropDownMenu_CreateInfo(); 
+	local info = Altoholic_UIDropDownMenu_CreateInfo(); 
 
 	info.text		= L["Find Upgrade"] .. " " .. GREEN .. L["(based on iLvl)"]
 	info.value		= -1

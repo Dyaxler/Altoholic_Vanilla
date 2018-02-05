@@ -1,6 +1,21 @@
 ****************************************************************************************************
 *	Altaholic for Vanilla WoW: Change Log							   *
 ****************************************************************************************************
+	v1.06
+	- Fixed an issue with the Bag Usage menu not updating the bags size correctly after
+	  upgrading/changing a bag slot.
+
+	- Fixed an issue with E-Mails getting marked as read when a player opens their mailbox.
+	  This causes all items in the mailbox to go from (30 to X-num of days left) to 3 days
+	  remaining. The Altoholic option [Scan mail body (marks it as read)] was broken.
+	  Changed the default to "off (unchecked" and fixed the toggle.
+
+	- During one of my code clean-ups I inadvertanly removed my "UIDropDownMenu_CreateInfo"
+	  code shim. Originally this API didn't exsist in Vanilla WoW but does in BC. Cartographer
+	  has a simular shim so this issue was missed in testing before the latest release. This
+	  has been fixed and if you have Cartographer or not, this should no longer spam the player
+	  with errors.
+****************************************************************************************************
 	v1.05
 	- Added ChatLink support. Questlinks will inform you which Alts have the quest. Itemlinks
 	  will inform you where the item is dropped if it’s gear. If it’s a consumable or any other

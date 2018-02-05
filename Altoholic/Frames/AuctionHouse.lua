@@ -223,7 +223,7 @@ end
 
 
 function AltoAuctions_RightClickMenu_OnLoad()
-	local info = UIDropDownMenu_CreateInfo(); 
+	local info = Altoholic_UIDropDownMenu_CreateInfo(); 
 
 	info.text		= WHITE .. L["Clear your faction's entries"]
 	info.value		= 1

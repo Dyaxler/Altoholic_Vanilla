@@ -185,7 +185,7 @@ function Altoholic_AccountSummaryLevel_OnClick(button, id)
 end
 
 function Summary_RightClickMenu_OnLoad()
-	local info = UIDropDownMenu_CreateInfo(); 
+	local info = Altoholic_UIDropDownMenu_CreateInfo(); 
 	info.text		= L["View bags"]
 	info.value		= 1
 	info.func		= Altoholic_ViewAltInfo;

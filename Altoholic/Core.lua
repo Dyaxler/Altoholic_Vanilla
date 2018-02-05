@@ -6,7 +6,7 @@ Altoholic.CharacterInfo = {}
 Altoholic.BagIndices = {}
 Altoholic.MenuCache = {}
 Altoholic.vars = {}
-Altoholic.vars.version = "v1.0.5"
+Altoholic.vars.version = "v1.0.6"
 local G = AceLibrary("Gratuity-2.0")
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
@@ -112,7 +112,7 @@ Altoholic:RegisterDefaults('account', {
 		MailWarningThreshold = 5,
 		SortDescending = 0, 				-- display search results in the loot table in ascending (0) or descending (1) order ?
 		RestXPMode = 0, 					-- display max rest xp in normal 100% mode or in level equivalent 150% mode (1) ?
-		ScanMailBody = 1,					-- by default, scan the body of a mail (this action marks it as read)
+		ScanMailBody = 0,					-- by default, scan the body of a mail (this action marks it as read)
 		TooltipSource = 1,
 		TooltipCount = 1,
 		TooltipTotal = 1,
@@ -705,3 +705,5 @@ function Altoholic:strsplit(delimiter, subject)
   string.gsub(subject, pattern, function(c) fields[table.getn(fields)+1] = c end)
   return unpack(fields)
 end
+
+Altoholic_UIDropDownMenu_CreateInfo = Altoholic_UIDropDownMenu_CreateInfo or loadstring("local t = {} return function() for k in pairs(t) do t[k] = nil t[k] = {} end return t end")()

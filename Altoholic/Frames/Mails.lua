@@ -105,12 +105,14 @@ function Altoholic:UpdatePlayerMail()
                 daysleft = daysLeft
 			} )
 		end
-        local inboxText = GetInboxText(i)
-        if AltoOptions_ScanMailBody:GetChecked() and inboxText then
-            if IsAddOnLoaded("GMail") and string.find(inboxText, GMAIL_ITEMNUM) then
-                inboxText = false
-            else
-                inboxText = inboxText
+        if AltoOptions_ScanMailBody:GetChecked() then
+            local inboxText = GetInboxText(i)
+            if inboxText then
+                if IsAddOnLoaded("GMail") and string.find(inboxText, GMAIL_ITEMNUM) then
+                    inboxText = false
+                else
+                    inboxText = inboxText
+                end
             end
         end
         local gold, silver, copper, mSent
@@ -213,6 +215,7 @@ function Altoholic:MAIL_SHOW()
 	V.Attachments = {}
 	V.AllowMailUpdate = true
 	V.isMailBoxOpen = true
+    self:UpdatePlayerMail()
 end
 
 function Altoholic:MAIL_CLOSED()

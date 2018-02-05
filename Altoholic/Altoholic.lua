@@ -486,7 +486,7 @@ function Altoholic:BuildCharacterInfoTable()
 end
 
 function Altoholic:DropDownRarity_Initialize()
-	local info = UIDropDownMenu_CreateInfo();
+	local info = Altoholic_UIDropDownMenu_CreateInfo();
 	V.SearchRarity = 0
 	for i = 0, 6 do
 		info.text = ITEM_QUALITY_COLORS[i].hex .. getglobal("ITEM_QUALITY"..i.."_DESC")
@@ -503,7 +503,7 @@ function Altoholic:DropDownRarity_Initialize()
 end
 
 function Altoholic:DropDownSlot_Initialize()
-	local info = UIDropDownMenu_CreateInfo();
+	local info = Altoholic_UIDropDownMenu_CreateInfo();
 	V.SearchSlot = 0
 	info.text = L["Any"]
 	info.value = 0
@@ -529,13 +529,9 @@ function Altoholic:DropDownSlot_Initialize()
 	end
 end
 
-function Altoholic:UpdatePlayerStats()
+function Altoholic:UpdatePlayerInventory()
 	local r = self.db.account.data[V.faction][V.realm]
 	local c = r.char[V.player]
-	self:PLAYER_XP_UPDATE()
-	self:UpdatePlayerSkills()
-    self:UpdatePlayerSpells()
-	-- *** Container information ***
 	local nTotalSlots = 0
 	local nSlots
 	nTotalSlots = GetContainerNumSlots(0)
@@ -549,6 +545,15 @@ function Altoholic:UpdatePlayerStats()
 		end
 	end
 	c.bags = c.bags .. " |r(|cFF00FF00" .. nTotalSlots .. "|r)"
+end
+
+function Altoholic:UpdatePlayerStats()
+	local r = self.db.account.data[V.faction][V.realm]
+	local c = r.char[V.player]
+	self:PLAYER_XP_UPDATE()
+	self:UpdatePlayerSkills()
+    self:UpdatePlayerSpells()
+    self:UpdatePlayerInventory()
 	self:UpdateEquipment()
 	self:PLAYER_MONEY()
 	-- *** Factions ***
@@ -1973,16 +1978,18 @@ function Altoholic:BAG_UPDATE(bag)
 	if V.isMailBoxOpen then
 		self:UpdatePlayerMail()
 	end
-	self:UpdatePlayerBag(bag)
+    self:UpdatePlayerBags()
+    self:UpdatePlayerInventory()
 end
 
 function Altoholic:BANKFRAME_OPENED()
-	self:UpdatePlayerBank()
+    self:UpdatePlayerBank()
 	V.isBankOpen = true
 	self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
 end
 
 function Altoholic:BANKFRAME_CLOSED()
+    self:UpdatePlayerBank()
 	V.isBankOpen = nil
 	if self:IsEventRegistered("PLAYERBANKSLOTS_CHANGED") then
 		self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
