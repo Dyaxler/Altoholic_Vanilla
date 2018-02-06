@@ -310,7 +310,7 @@ function Altoholic:OnEnable()
 	self:CreateScrollLines("AccountSummary", "CharacterSummaryTemplate", 14);
 	self:CreateScrollLines("BagUsage", "BagUsageTemplate", 14);
 	self:CreateScrollLines("Containers", "ContainerTemplate", 7, 14);
-    self:CreateScrollLines("Mail", "MailEntryTemplate", 7);
+    self:CreateScrollLines("AltoMail", "MailEntryTemplate", 7);
 	self:CreateScrollLines("Search", "SearchEntryTemplate", 7);
 	self:CreateScrollLines("Equipment", "EquipmentEntryTemplate", 7, 10);
 	-- Manually fill the reputation frame
@@ -388,7 +388,7 @@ end
 
 function Altoholic:ActivateMenuItem(frame)
 	for k, v in pairs(self.Categories) do
-    	getglobal(v):Hide()
+       	getglobal(v):Hide()
 	end
 	getglobal(frame):Show()
 end
@@ -965,7 +965,7 @@ function Altoholic:BuildMailSubMenu()
 					id = (n*100)+i,
 					OnClick = function(self)
 						Altoholic:SelectAlt(altID)
-						Altoholic:ActivateMenuItem("Mail")
+						Altoholic:ActivateMenuItem("AltoMail")
 					end
 				} )
 				i = i + 1

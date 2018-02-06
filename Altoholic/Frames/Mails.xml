@@ -71,7 +71,7 @@
 		</HighlightTexture>
 	</Button>
 
-	<Frame name="Mail" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoMail" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>

@@ -5,7 +5,7 @@ local GREEN		= "|cFF00FF00"
 function Altoholic:Mail_Update()
 	local c = self.db.account.data[V.CurrentFaction][V.CurrentRealm].char[V.CurrentAlt]
 	local VisibleLines = 7
-	local frame = "Mail"
+	local frame = "AltoMail"
 	local entry = frame.."Entry"
 	if table.getn(c.mail) == 0 then
 		if c.lastmailcheck == 0 then

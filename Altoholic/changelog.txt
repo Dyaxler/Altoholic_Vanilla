@@ -1,7 +1,12 @@
 ****************************************************************************************************
 *	Altaholic for Vanilla WoW: Change Log							   *
 ****************************************************************************************************
-	v1.06
+	v1.0.7
+	- Fixed an invalid method error while using Altaholic with the addon "Mail". The framename
+	  the original author used ("Mail") was too generic and caused a conflict. Changing the
+	  framename to ("AltoMail") resolves the conflict. Thanks to Donkeykoong for the bug report.
+****************************************************************************************************
+	v1.0.6
 	- Fixed an issue with the Bag Usage menu not updating the bags size correctly after
 	  upgrading/changing a bag slot.
 
@@ -16,7 +21,7 @@
 	  has been fixed and if you have Cartographer or not, this should no longer spam the player
 	  with errors.
 ****************************************************************************************************
-	v1.05
+	v1.0.5
 	- Added ChatLink support. Questlinks will inform you which Alts have the quest. Itemlinks
 	  will inform you where the item is dropped if it’s gear. If it’s a consumable or any other
 	  type of item you can use it will tell you how many you have and which Alts have them. In

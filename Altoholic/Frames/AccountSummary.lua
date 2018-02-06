@@ -221,7 +221,7 @@ function Altoholic_ViewAltInfo()
 		Altoholic:ClearScrollFrame(getglobal("ContainersScrollFrame"), "ContainersEntry", 7, 41)
 		Altoholic:ActivateMenuItem("Containers")
 	elseif this.value == 2 then		-- mailbox
-		Altoholic:ActivateMenuItem("Mail")
+		Altoholic:ActivateMenuItem("AltoMail")
 	elseif this.value == 3 then		-- quest log
 		Altoholic:ActivateMenuItem("Quests")
 	elseif this.value == 4 then		-- auctions

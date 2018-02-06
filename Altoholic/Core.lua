@@ -6,7 +6,7 @@ Altoholic.CharacterInfo = {}
 Altoholic.BagIndices = {}
 Altoholic.MenuCache = {}
 Altoholic.vars = {}
-Altoholic.vars.version = "v1.0.6"
+Altoholic.vars.version = "v1.0.7"
 local G = AceLibrary("Gratuity-2.0")
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
@@ -51,7 +51,7 @@ Altoholic.Categories = {
 	"AccountSummary", 
 	"BagUsage",
 	"Containers",
-	"Mail",
+	"AltoMail",
 	"Search",
 	"Equipment",
 	"Reputations",
