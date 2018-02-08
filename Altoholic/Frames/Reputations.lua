@@ -9,12 +9,12 @@ local ORANGE	= "|cFFFF7F00"
 
 function Altoholic:Reputations_Update()
 	local VisibleLines = 11
-	local frame = "Reputations"
+	local frame = "AltoReputations"
 	local entry = frame.."Entry"
 	-- ** draw class icons **
 	local i = 1
 	for CharacterName, c in pairs(self.db.account.data[V.faction][V.realm].char) do
-		local itemName = "ReputationsClassesItem" .. i;
+		local itemName = "AltoReputationsClassesItem" .. i;
 		local itemButton = getglobal(itemName);
 		itemButton:SetScript("OnEnter", Altoholic_Reputations_OnEnter)
 		itemButton:SetScript("OnLeave", function(self) AltoTooltip:Hide() end)
@@ -31,8 +31,8 @@ function Altoholic:Reputations_Update()
 		i = i + 1
 	end
 	while i <= 10 do
-		getglobal("ReputationsClassesItem" .. i):Hide()
-		getglobal("ReputationsClassesItem" .. i).CharName = nil
+		getglobal("AltoReputationsClassesItem" .. i):Hide()
+		getglobal("AltoReputationsClassesItem" .. i).CharName = nil
 		i = i + 1
 	end
 	getglobal(entry .. "1"):Show()

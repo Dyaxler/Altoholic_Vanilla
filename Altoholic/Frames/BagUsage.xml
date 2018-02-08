@@ -133,7 +133,7 @@
 		</Frames>
 	</Button>	
 	
-	<Frame name="BagUsage" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoBags" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -194,7 +194,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				BagUsageScrollFrame:Show()
+				AltoBagsScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

@@ -6,7 +6,7 @@ local TEAL		= "|cFF00FF9A"
 function Altoholic:Recipes_Update()
 	local c = self.db.account.data[V.CurrentFaction][V.CurrentRealm].char[V.CurrentAlt]		-- current alt
 	local VisibleLines = 14
-	local frame = "Recipes"
+	local frame = "AltoRecipes"
 	local entry = frame.."Entry"
 	if c.recipes[V.CurrentProfession].ScanFailed then
 		getglobal("AltoholicFrame_Status"):SetText(L["No data: "] .. V.CurrentProfession .. L[" scan failed for "] ": |cFFFFD700" .. V.CurrentAlt .. " of ".. V.CurrentRealm)

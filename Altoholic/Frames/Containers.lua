@@ -3,7 +3,7 @@ local V = Altoholic.vars
 
 function Altoholic:Containers_Update()
 	local VisibleLines = 7
-	local frame = "Containers"
+	local frame = "AltoContainers"
 	local entry = frame.."Entry"
 	if table.getn(self.BagIndices) == 0 then
 		self:ClearScrollFrame(getglobal(frame.."ScrollFrame"), entry, VisibleLines, 41)

@@ -23,7 +23,7 @@
 		</Frames>
 	</Button>
 	
-	<Frame name="Containers" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoContainers" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -84,7 +84,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				ContainersScrollFrame:Show()
+				AltoContainersScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

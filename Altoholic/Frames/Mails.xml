@@ -132,7 +132,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				MailScrollFrame:Show()
+				AltoMailScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

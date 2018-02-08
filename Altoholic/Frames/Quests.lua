@@ -8,7 +8,7 @@ local TEAL		= "|cFF00FF9A"
 function Altoholic:Quests_Update()
 	local c = self.db.account.data[V.CurrentFaction][V.CurrentRealm].char[V.CurrentAlt]
 	local VisibleLines = 14
-	local frame = "Quests"
+	local frame = "AltoQuests"
 	local entry = frame.."Entry"
 	if table.getn(c.questlog) == 0 then
 		getglobal("AltoholicFrame_Status"):SetText("|cFFFFD700" .. V.CurrentAlt .. " of ".. V.CurrentRealm .. " |cFFFFFFFF" .. "No quests found")

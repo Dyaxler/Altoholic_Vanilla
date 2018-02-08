@@ -178,7 +178,7 @@
 		</Frames>
 	</Button>
 	
-	<Frame name="Recipes" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoRecipes" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -239,7 +239,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				RecipesScrollFrame:Show()
+				AltoRecipesScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

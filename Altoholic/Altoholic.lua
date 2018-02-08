@@ -34,10 +34,10 @@ local LEVEL_CAP = 60
 Altoholic.Menu = {
 	{	name = L["Account Summary"], isCollapsed = false,
 		subMenu = {
-			{ name = L["Characters"], OnClick = function() Altoholic:ActivateMenuItem("AccountSummary") end },
-			{ name = L["Bag Usage"], OnClick = function() Altoholic:ActivateMenuItem("BagUsage") end },
-			{ name = SKILLS, OnClick = function() Altoholic:ActivateMenuItem("Skills") end },
-			{ name = L["Reputations"], OnClick = function() Altoholic:ActivateMenuItem("Reputations") end }
+			{ name = L["Characters"], OnClick = function() Altoholic:ActivateMenuItem("AltoSummary") end },
+			{ name = L["Bag Usage"], OnClick = function() Altoholic:ActivateMenuItem("AltoBags") end },
+			{ name = SKILLS, OnClick = function() Altoholic:ActivateMenuItem("AltoSkills") end },
+			{ name = L["Reputations"], OnClick = function() Altoholic:ActivateMenuItem("AltoReputations") end }
 		},
 		OnClick = function() Altoholic:Menu_Update(MENU_SUMMARY) end
     },
@@ -307,14 +307,14 @@ function Altoholic:OnEnable()
 		Altoholic:DropDownSlot_Initialize();
 	end)
 	-- *** Create Scroll Frames' children lines ***
-	self:CreateScrollLines("AccountSummary", "CharacterSummaryTemplate", 14);
-	self:CreateScrollLines("BagUsage", "BagUsageTemplate", 14);
-	self:CreateScrollLines("Containers", "ContainerTemplate", 7, 14);
+	self:CreateScrollLines("AltoSummary", "CharacterSummaryTemplate", 14);
+	self:CreateScrollLines("AltoBags", "BagUsageTemplate", 14);
+	self:CreateScrollLines("AltoContainers", "ContainerTemplate", 7, 14);
     self:CreateScrollLines("AltoMail", "MailEntryTemplate", 7);
-	self:CreateScrollLines("Search", "SearchEntryTemplate", 7);
-	self:CreateScrollLines("Equipment", "EquipmentEntryTemplate", 7, 10);
+	self:CreateScrollLines("AltoSearch", "SearchEntryTemplate", 7);
+	self:CreateScrollLines("AltoEquipment", "EquipmentEntryTemplate", 7, 10);
 	-- Manually fill the reputation frame
-	local repFrame = "Reputations"
+	local repFrame = "AltoReputations"
 	f = CreateFrame("Button", repFrame .. "Entry" .. 1, getglobal(repFrame), "ReputationEntryTemplate")
 	f:SetPoint("TOPLEFT", repFrame .. "ScrollFrame", "TOPLEFT", 0, -45)
 	for i = 2, 11 do
@@ -331,9 +331,9 @@ function Altoholic:OnEnable()
 	for j=9, 1, -1 do
 		getglobal(repFrame.."ClassesItem" .. j):SetPoint("BOTTOMRIGHT", repFrame.."ClassesItem" .. (j + 1), "BOTTOMLEFT", -5, 0);
 	end
-	self:CreateScrollLines("Skills", "SkillsTemplate", 14);
-	self:CreateScrollLines("Quests", "QuestEntryTemplate", 14);
-	self:CreateScrollLines("Recipes", "RecipesEntryTemplate", 14);
+	self:CreateScrollLines("AltoSkills", "SkillsTemplate", 14);
+	self:CreateScrollLines("AltoQuests", "QuestEntryTemplate", 14);
+	self:CreateScrollLines("AltoRecipes", "RecipesEntryTemplate", 14);
 	self:CreateScrollLines("AltoAuctions", "AuctionEntryTemplate", 7);
 	self:CheckExpiredMail()
 	self:BuildContainersSubMenu()
@@ -409,7 +409,7 @@ function Altoholic:OnShow()
 	end
 	self:BuildFactionsTable()
 	self:BuildCharacterInfoTable()
-	self:ActivateMenuItem("AccountSummary")
+	self:ActivateMenuItem("AltoSummary")
 	self:Menu_Update()
 end
 
@@ -929,8 +929,8 @@ function Altoholic:BuildContainersSubMenu()
 					OnClick = function(self)
 						Altoholic:SelectAlt(altID)
 						Altoholic:UpdateContainerCache()
-						Altoholic:ClearScrollFrame(getglobal("ContainersScrollFrame"), "ContainersEntry", 7, 41)
-						Altoholic:ActivateMenuItem("Containers")
+						Altoholic:ClearScrollFrame(getglobal("AltoContainersScrollFrame"), "AltoContainersEntry", 7, 41)
+						Altoholic:ActivateMenuItem("AltoContainers")
 					end
 				} )
 				i = i + 1
@@ -988,7 +988,7 @@ function Altoholic:BuildEquipmentSubMenu()
 				subMenu = {},
 				OnClick = function(self)
 					Altoholic:SelectAlt(altID)
-					Altoholic:ActivateMenuItem("Equipment")
+					Altoholic:ActivateMenuItem("AltoEquipment")
 				end
 			} )
 			n = n + 1
@@ -1017,7 +1017,7 @@ function Altoholic:BuildQuestsSubMenu()
 					id = (n*100)+i,
 					OnClick = function(self)
 						Altoholic:SelectAlt(altID)
-						Altoholic:ActivateMenuItem("Quests")
+						Altoholic:ActivateMenuItem("AltoQuests")
 					end
 				} )
 				i = i + 1
@@ -1069,7 +1069,7 @@ function Altoholic:BuildRecipesSubMenu()
                             id = floor(id / 100)
                             Altoholic:SelectAlt(altID)
                             Altoholic:SelectProfession(skillID)
-                            Altoholic:ActivateMenuItem("Recipes")
+                            Altoholic:ActivateMenuItem("AltoRecipes")
                         end
                     } )
 				end
@@ -1247,7 +1247,7 @@ function Altoholic:ClearScrollFrame(name, entry, lines, height)
 	for i=1, lines do
 		getglobal(entry..i):Hide()
 	end
-	FauxScrollFrame_Update( name, lines, lines, height);
+	FauxScrollFrame_Update(name, lines, lines, height);
 end
 
 function Altoholic:CreateScrollLines(parentFrame, inheritsFrom, numLines, numItems)
@@ -1825,6 +1825,21 @@ function Altoholic:WhoKnowsRecipe(tooltip, ttype)
     end
 end
 
+function Altoholic:GetCraftFromRecipe(link)
+	local _, _, _, recipeName = Altoholic:strsplit("|", link)
+	local craftName
+	local pos = string.find(recipeName, L["Transmute"])
+	if pos then
+		return string.sub(recipeName, pos, -2)
+	else
+        _, _, _, craftName = Altoholic:strsplit(":", recipeName)
+	end
+	if craftName == nil then
+		return string.sub(recipeName, 3, -2)
+	end
+	return string.sub(craftName, 2, -2)
+end
+
 function Altoholic:ProcessTooltip(tooltip, ttype, link, bagID, slotID)
     local itemID
     if bagID == "player" then        
@@ -1989,7 +2004,6 @@ function Altoholic:BANKFRAME_OPENED()
 end
 
 function Altoholic:BANKFRAME_CLOSED()
-    self:UpdatePlayerBank()
 	V.isBankOpen = nil
 	if self:IsEventRegistered("PLAYERBANKSLOTS_CHANGED") then
 		self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")

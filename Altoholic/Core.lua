@@ -6,7 +6,7 @@ Altoholic.CharacterInfo = {}
 Altoholic.BagIndices = {}
 Altoholic.MenuCache = {}
 Altoholic.vars = {}
-Altoholic.vars.version = "v1.0.7"
+Altoholic.vars.version = "v1.0.8"
 local G = AceLibrary("Gratuity-2.0")
 local L = AceLibrary("AceLocale-2.2"):new("Altoholic")
 local V = Altoholic.vars
@@ -48,18 +48,18 @@ local options = {
 }
 
 Altoholic.Categories = {
-	"AccountSummary", 
-	"BagUsage",
-	"Containers",
+	"AltoSummary", 
+	"AltoBags",
+	"AltoContainers",
 	"AltoMail",
-	"Search",
-	"Equipment",
-	"Reputations",
-	"AltoOptions",		-- renamed from "Options" to "AltoOptions", to prevent collisions with other addons.
-	"Quests",
-	"Recipes",
+	"AltoSearch",
+	"AltoEquipment",
+	"AltoReputations",
+	"AltoOptions",
+	"AltoQuests",
+	"AltoRecipes",
 	"AltoAuctions",
-	"Skills"
+	"AltoSkills"
 }
 
 Altoholic.RecipesBooks = {

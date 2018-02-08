@@ -120,7 +120,7 @@
 		</Frames>
 	</Button>
 	
-	<Frame name="Quests" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoQuests" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -181,7 +181,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				QuestsScrollFrame:Show()
+				AltoQuestsScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

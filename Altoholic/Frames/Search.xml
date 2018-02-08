@@ -157,7 +157,7 @@
 		</HighlightTexture>
 	</Button>
 
-	<Frame name="Search" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoSearch" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -218,7 +218,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				SearchScrollFrame:Show()
+				AltoSearchScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

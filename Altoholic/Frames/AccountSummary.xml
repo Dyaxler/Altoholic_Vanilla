@@ -144,7 +144,7 @@
 		</Frames>
 	</Button>
 
-	<Frame name="AccountSummary" parent="AltoholicFrame">
+	<Frame name="AltoSummary" parent="AltoholicFrame">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -216,7 +216,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				AccountSummaryScrollFrame:Show()
+				AltoSummaryScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

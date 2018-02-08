@@ -1,10 +1,16 @@
 ****************************************************************************************************
 *	Altaholic for Vanilla WoW: Change Log							   *
 ****************************************************************************************************
+	v1.0.8
+	- Renamed all frames to something less generic to avoid global collisions. The recent fix
+	  for the addon "Mail" wasn't enough.
+	
+	- Fixed an event issue where a function was clearing characters bank cache upon close.
+****************************************************************************************************
 	v1.0.7
 	- Fixed an invalid method error while using Altaholic with the addon "Mail". The framename
-	  the original author used ("Mail") was too generic and caused a conflict. Changing the
-	  framename to ("AltoMail") resolves the conflict. Thanks to Donkeykoong for the bug report.
+	  the original author used ("Mail") was too generic and caused a conflict. Changed the
+	  framename to ("AltoMail") to avoid this conflict.
 ****************************************************************************************************
 	v1.0.6
 	- Fixed an issue with the Bag Usage menu not updating the bags size correctly after

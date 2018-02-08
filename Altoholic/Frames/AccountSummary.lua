@@ -11,7 +11,7 @@ local GREEN		= "|cFF00FF00"
 
 function Altoholic:AccountSummary_Update()
 	local VisibleLines = 14
-	local frame = "AccountSummary"
+	local frame = "AltoSummary"
 	local entry = frame.."Entry"
 	if table.getn(self.CharacterInfo) == 0 then
 		self:ClearScrollFrame(getglobal(frame.."ScrollFrame"), entry, VisibleLines, 18)
@@ -179,8 +179,8 @@ function Altoholic_AccountSummaryLevel_OnClick(button, id)
 		V.CurrentFaction, V.CurrentRealm = Altoholic:GetCharacterInfo(line)
 		V.CurrentAlt = s.name
 		Altoholic:UpdateContainerCache()
-		Altoholic:ClearScrollFrame(getglobal("ContainersScrollFrame"), "ContainersEntry", 7, 41)
-		Altoholic:ActivateMenuItem("Containers")
+		Altoholic:ClearScrollFrame(getglobal("AltoContainersScrollFrame"), "AltoContainersEntry", 7, 41)
+		Altoholic:ActivateMenuItem("AltoContainers")
 	end
 end
 
@@ -218,12 +218,12 @@ function Altoholic_ViewAltInfo()
 	V.CurrentAlt = Altoholic.CharacterInfo[line].name
 	if this.value == 1 then		-- bags
 		Altoholic:UpdateContainerCache()
-		Altoholic:ClearScrollFrame(getglobal("ContainersScrollFrame"), "ContainersEntry", 7, 41)
-		Altoholic:ActivateMenuItem("Containers")
+		Altoholic:ClearScrollFrame(getglobal("AltoContainersScrollFrame"), "AltoContainersEntry", 7, 41)
+		Altoholic:ActivateMenuItem("AltoContainers")
 	elseif this.value == 2 then		-- mailbox
 		Altoholic:ActivateMenuItem("AltoMail")
 	elseif this.value == 3 then		-- quest log
-		Altoholic:ActivateMenuItem("Quests")
+		Altoholic:ActivateMenuItem("AltoQuests")
 	elseif this.value == 4 then		-- auctions
 		V.AuctionType = "auctions"
 		Altoholic.Auctions_Update = Altoholic.Auctions_Update_Auctions
@@ -280,6 +280,6 @@ function Altoholic_DeleteAlt()
 	Altoholic:BuildAuctionsSubMenu()
 	Altoholic:BuildBidsSubMenu()
 	Altoholic:BuildFactionsTable()
-	Altoholic:ActivateMenuItem("AccountSummary")
+	Altoholic:ActivateMenuItem("AltoSummary")
 	DEFAULT_CHAT_FRAME:AddMessage(TEAL .. "Altoholic: " .. WHITE .. L["Character "] .. AltName .. L[" successfully deleted"])
 end

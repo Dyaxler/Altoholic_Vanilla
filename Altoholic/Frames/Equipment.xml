@@ -35,7 +35,7 @@
 		</Frames>
 	</Button>
 
-	<Frame name="Equipment" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoEquipment" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -106,7 +106,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				EquipmentScrollFrame:Show()
+				AltoEquipmentScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

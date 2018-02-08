@@ -147,7 +147,7 @@
 		</Frames>
 	</Button>
 
-	<Frame name="Skills" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoSkills" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -208,7 +208,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				SkillsScrollFrame:Show()
+				AltoSkillsScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

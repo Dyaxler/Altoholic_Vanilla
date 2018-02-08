@@ -14,7 +14,7 @@ local CLASS_PRIEST	= 9
 
 function Altoholic:Equipment_Update()
 	local VisibleLines = 7
-	local frame = "Equipment"
+	local frame = "AltoEquipment"
 	local entry = frame.."Entry"
 	-- ** draw class icons **
 	local i = 1
@@ -276,5 +276,5 @@ function Altoholic_FindEquipmentUpgrade(self)
 			return a.iLvl < b.iLvl
 		end)
 	end
-	Altoholic:ActivateMenuItem("Search")
+	Altoholic:ActivateMenuItem("AltoSearch")
 end

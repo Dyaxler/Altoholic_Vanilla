@@ -129,7 +129,7 @@
 		</Frames>
 	</Button>
 	
-	<Frame name="Reputations" parent="AltoholicFrame" hidden="true">
+	<Frame name="AltoReputations" parent="AltoholicFrame" hidden="true">
 		<Size>
 			<AbsDimension x="615" y="306"/>
 		</Size>
@@ -199,7 +199,7 @@
 		</Frames>
 		<Scripts>
 			<OnShow>
-				ReputationsScrollFrame:Show()
+				AltoReputationsScrollFrame:Show()
 			</OnShow>
 		</Scripts>
 	</Frame>

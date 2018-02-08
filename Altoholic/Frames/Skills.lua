@@ -13,7 +13,7 @@ local GREEN		= "|cFF00FF00"
 
 function Altoholic:Skills_Update()
 	local VisibleLines = 14
-	local frame = "Skills"
+	local frame = "AltoSkills"
 	local entry = frame.."Entry"
 	if table.getn(self.CharacterInfo) == 0 then
 		self:ClearScrollFrame(getglobal(frame.."ScrollFrame"), entry, VisibleLines, 18)

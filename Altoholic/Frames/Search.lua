@@ -9,7 +9,7 @@ local YELLOW	= "|cFFFFFF00"
 
 function Altoholic:Search_Update()
 	local VisibleLines = 7
-	local frame = "Search"
+	local frame = "AltoSearch"
 	local entry = frame.."Entry"
 	if table.getn(self.SearchResults) == 0 then
 		self:ClearScrollFrame(getglobal(frame.."ScrollFrame"), entry, VisibleLines, 41)
@@ -76,7 +76,7 @@ function Altoholic:SearchReset()
 	AltoholicFrame_MinLevel:SetText("")
 	AltoholicFrame_MaxLevel:SetText("")
 	for i=1, 7 do
-		getglobal("SearchEntry" .. i):Hide()
+		getglobal("AltoSearchEntry" .. i):Hide()
 	end
 	getglobal("AltoholicFrame_Status"):Hide()
     self.SearchResults = {}
@@ -156,7 +156,7 @@ function Altoholic:SearchItem(searchType, searchSubType)
 			end)
 		end
 	end
-	self:ActivateMenuItem("Search")
+	self:ActivateMenuItem("AltoSearch")
 end
 
 function Altoholic:SearchRealm()

@@ -11,7 +11,7 @@ local CYAN		= "|cFF1CFAFE"
 
 function Altoholic:BagUsage_Update()
 	local VisibleLines = 14
-	local frame = "BagUsage"
+	local frame = "AltoBags"
 	local entry = frame.."Entry"
 	
 	if table.getn(self.CharacterInfo) == 0 then
