@@ -1,6 +1,11 @@
 ****************************************************************************************************
 *	Altaholic for Vanilla WoW: Change Log							   *
 ****************************************************************************************************
+	v1.0.9
+	- RightClick menus fixed - root cause: renamed frames from previous release
+
+	- Re-origanized addon files
+****************************************************************************************************
 	v1.0.8
 	- Renamed all frames to something less generic to avoid global collisions. The recent fix
 	  for the addon "Mail" wasn't enough.

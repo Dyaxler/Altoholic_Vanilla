@@ -122,7 +122,7 @@ function Altoholic_Equipment_OnClick()
 	if button == "RightButton" then
 		V.UpgradeItemID = Altoholic:GetIDFromLink(link)		-- item ID of the item to find an upgrade for
 		V.CharacterClass = Altoholic.Classes[ r.char[this.CharName].class ]
-		ToggleDropDownMenu(1, nil, EquipmentRightClickMenu, this:GetName(), 0, -5);
+		ToggleDropDownMenu(1, nil, AltoEquipmentRightClickMenu, this:GetName(), 0, -5);
 		return
 	end
 	

@@ -173,7 +173,7 @@ function Altoholic_AccountSummaryLevel_OnClick(button, id)
 	end
 	if button == "RightButton" then
 		V.CharInfoLine = line	-- line containing info about the alt on which action should be taken (delete, ..)
-		ToggleDropDownMenu(1, nil, AccountSummaryRightClickMenu, this:GetName(), 0, -5);
+		ToggleDropDownMenu(1, nil, AltoSummaryRightClickMenu, this:GetName(), 0, -5);
 		return
 	elseif button == "LeftButton" then
 		V.CurrentFaction, V.CurrentRealm = Altoholic:GetCharacterInfo(line)
