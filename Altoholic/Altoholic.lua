@@ -1638,7 +1638,7 @@ function Altoholic:HookTooltip()
         Altoholic:ProcessTooltip(ItemRefTooltip, "ItemRef", link)
         Altoholic:IsKnownQuest(name)
     end)
-    self:SecureHook(GameTooltip, "Show", function(tooltip)
+    --[[self:SecureHook(GameTooltip, "Show", function(tooltip)
         local itemID = Altoholic:IsGatheringNode(getglobal("GameTooltipTextLeft1"):GetText() )
         if itemID then
             if AltoOptions_TooltipCount:GetChecked() or AltoOptions_TooltipTotal:GetChecked() then
@@ -1659,7 +1659,34 @@ function Altoholic:HookTooltip()
                 GameTooltip:AddLine(V.ToolTipCachedTotal,1,1,1);
             end
         end
-    end)
+    end)]]
+end
+
+function Altoholic_OnShow()
+  --do return end
+  local itemID = Altoholic:IsGatheringNode(getglobal("GameTooltipTextLeft1"):GetText() );
+  --DEFAULT_CHAT_FRAME:AddMessage("OnSHow " .. itemID);
+  if itemID then
+      if AltoOptions_TooltipCount:GetChecked() or AltoOptions_TooltipTotal:GetChecked() then
+          V.ItemCount = nil;
+          V.ToolTipCachedCount = Altoholic:GetItemCount(itemID)
+          if V.ToolTipCachedCount > 0 then
+              V.ToolTipCachedTotal = GOLD .. L["Total owned"] .. ": |cff00ff9a" .. V.ToolTipCachedCount
+          else
+              V.ToolTipCachedTotal = nil
+          end
+      end
+      if (AltoOptions_TooltipCount:GetChecked()) and (V.ToolTipCachedCount > 0) then
+          GameTooltip:AddLine(" ",1,1,1);
+          for CharacterName, c in pairs (V.ItemCount) do
+              GameTooltip:AddDoubleLine(CharacterName .. ":",  TEAL .. c);
+          end
+      end
+      if (AltoOptions_TooltipTotal:GetChecked()) and (V.ToolTipCachedTotal) then
+          GameTooltip:AddLine(V.ToolTipCachedTotal,1,1,1);
+          GameTooltip:AddLine(" ",1,1,1);
+      end
+  end
 end
 
 function Altoholic:RecipeOrBook(ttname)
@@ -1841,6 +1868,7 @@ function Altoholic:GetCraftFromRecipe(link)
 end
 
 function Altoholic:ProcessTooltip(tooltip, ttype, link, bagID, slotID)
+    if Altoholic:IsGatheringNode(getglobal("GameTooltipTextLeft1"):GetText() ) then return end;
     local itemID
     if bagID == "player" then        
         bagID = 100
